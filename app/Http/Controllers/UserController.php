@@ -54,4 +54,17 @@ class UserController extends Controller
 
         return redirect('/');
     }
+
+    public function changeRole(Request $request, $id){
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+        return redirect()->route('admin.users')->with('success', 'Admin role updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect()->route('items.index')->with('success', 'Item removed successfully.');
+    }
 }
