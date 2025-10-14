@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Item;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ItemController extends Controller
 {
+    use SoftDeletes;
     public function index()
     {
         // Make sure you get all items and include the user
@@ -49,6 +51,16 @@ class ItemController extends Controller
         $item = Item::findOrFail($id);
         $item->update($request->all());
         return redirect()->route('admin.inventory')->with('success', 'Item updated successfully.');
+    }
+    
+    public function batch_supply(Request $request){
+        foreach($request->inventory_item as $id => $value){
+            $item = Item::findOrFail($id);
+            $item->stocks += $value;
+            $item->save();
+        }
+
+        return back()->with('success', 'Items supplied successfully.');
     }
 
     public function destroy($id)

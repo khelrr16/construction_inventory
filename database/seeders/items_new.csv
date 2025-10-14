@@ -1,0 +1,204 @@
+warehouse_id,category,name,description,cost,measure,stocks
+1,material,Cement,Chichibu White Portland Cement 100% Pure white 40KG,48,bag,29
+1,tool,Impact Drill,GSB 600 Professional,2750,pc,24
+1,material,Cement,REPUBLIC Portland PLUS BLENDED CEMENT TYPE IT (MH) TERNARY BLENDED CEMENT (VOLCANIC TUFF + FLY ASH) 40 KG,50,bag,24
+1,tool,Tape Measure ,STANLEY Tylon 25 ft. Tape Measure,700,pc,16
+1,tool,Nut Driver,STANLEY 7mm Nut Driver,15,pc,27
+1,tool,Screw Driver ,STANLEY Multi-bit Ratchet Screwdriver with 10 bit SET,500,pc,27
+1,tool,Framing Hammer ,Stanley FatMax Xtreme 51-124 15oz,20,pc,18
+1,tool,Sledge Hammer,STANLEY FATMAX Anti-Vibe 8lb Sledgehammer ,200,pc,18
+1,tool,Fiberglass Hammer,STANLEY 16 oz. Fiberglass Hammer,55,pc,16
+1,tool,Screw Driver,"STANLEY 2 pc. Screwdriver Set (1) PH2
+(1) SL 1/4 in.",27,pc,25
+1,tool,Screw Driver,"STANELY 6-in1 Quick Change Interchangeable Screwdriver (1) PH1, PH2
+(1) Slotted 3/16 in., Slotted 1/4 in.
+(1) Nut Driver: 1/4 in., 5/16 in.",15,pc,22
+1,material,Concrete Hollow Block (CHB),"Thickness: 3? (68mm)
+Compressive Strength (psi): 700
+Length: 390 mm
+Height: 190 mm
+Area: 0.0741 m2",12.5,pc,30
+1,material,Concrete Hollow Block (CHB),"Thickness: 4? (90mm)
+Compressive Strength (psi): 700, 1000, 1200
+Length: 390 mm
+Height: 190 mm
+Area: 0.0741 m2",13.5,pc,28
+1,material,Concrete Hollow Block (CHB),"Thickness: 5? (115mm)
+Compressive Strength (psi): 700, 1000, 1200
+Length: 390 mm
+Height: 190 mm
+Area: 0.0741 m2",15.5,pc,25
+1,material,Concrete Hollow Block (CHB),"6"" Corner Block ",10.5,pc,29
+1,material,Concrete Hollow Block (CHB),"6"" Beam Lock ",10.5,pc,24
+1,material,Concrete Hollow Block (CHB),"Thickness: 8? (190mm)
+Compressive Strength (psi): 700, 1000, 1200
+Length: 390 mm
+Height: 190 mm
+Area: 0.0741 m2",17.5,pc,28
+1,material,Concrete Hollow Block (CHB),"Thickness: 10? (245mm)
+Compressive Strength (psi): 700, 1000, 1200
+Length: 390 mm
+Height: 190 mm
+Area: 0.0741 m2",10.5,pc,23
+1,material,Concrete Hollow Block (CHB),Keystone Block,10.5,pc,10
+1,material,Autoclaved Aerated Concrete (AAC),"Ecolite 360-435 psi Length x Width: 
+600mm x 200mm
+Thickness: 
+100, 125, 150, 200, 250
+Nominal Density:
+450-550 kg/m3
+Thermal Conductivity:
+0.16 - 0.26 w/mK
+Fire Resistance Period:
+4 Hours",10.5,pc,12
+1,material,Autoclaved Aerated Concrete (AAC),"Eco+ Series 508-580 psi Length x Width: 
+600mm x 200mm
+Thickness: 
+100, 125, 150, 200, 250
+Nominal Density:
+450-550 kg/m3
+Thermal Conductivity:
+0.16 - 0.26 w/mK
+Fire Resistance Period:
+4 Hours",10.5,pc,10
+1,material,Autoclaved Aerated Concrete (AAC),"Optimum Series 
+PSI : 600-725
+Length x Width: 
+600mm x 200mm
+Thickness: 
+100, 125, 150, 200, 250
+Nominal Density:
+450-550 kg/m3
+Thermal Conductivity:
+0.16 - 0.26 w/mK
+Fire Resistance Period:
+4 Hours",10.5,pc,14
+1,material,Autoclaved Aerated Concrete (AAC),"Optimum+ Series
+PSI: 800-870
+Length x Width: 
+600mm x 200mm
+Thickness: 
+100, 125, 150, 200, 250
+Nominal Density:
+650-750 kg/m3
+Thermal Conductivity:
+0.16 - 0.26 w/mK
+Fire Resistance Period:
+4 Hours",10.5,pc,19
+1,material,Cement,Holcim Excel 40 KG,230,bag,29
+1,material,Deformed Steel Bar (Rebar),SteelAsia (Grade 60),180,pc,22
+1,material,Tile Adhesive,ABC Tile Adhesive 25 KG,450,bag,24
+1,material,Paint (Latex),Boysen Permacoat,650,pc,20
+1,material,Gypsum Board,Elephant Gypsum Board,250,pc,14
+1,material,Lumber,Tanguile,15,pc,27
+1,material,PVC Pipe,Neltex uPVC,100,pc,19
+1,tool,Knife,Makita D-58855 Snap off knife,245,pc,11
+1,tool,Knife,Makita E-10908 Utility knife,245,pc,27
+1,tool,Screw Driver,Makita D-58833 Ratchet Screwdriver,75,pc,27
+1,material,Adhesive,Bostik Rugby Original Premium Contact Cement,374,pc,18
+1,material,Aggregate,"Fine Aggregate (1.5 cu.m, capacity of elf dumper truck)",1650,cu.m,24
+1,material,Gravel,"Gravel G1 (1.5 cu.m, capacity of elf dumper truck)",2800,cu.m,22
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 1/2 x 1/2,316,pc,10
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 3/4 x 3/4,431,pc,13
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 1x1 ,572,pc,18
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 1-1/4 x 1-1/4,692,pc,16
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 1-1/2 x 1-1/2,879,pc,23
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 2 x 2,1162,pc,27
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 1/2 x 1,431,pc,25
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 1/2 x 2,726,pc,10
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 5/8 x 1-1/4,520,pc,11
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 1 x 1-1/2,756,pc,11
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 1 x 2,870,pc,11
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 1 x 3,1162,pc,22
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 2 x 3 ,2264,pc,14
+1,material,Stainless Steel,SS Tubular 202 1.2 mm 2 x 4,1756,pc,12
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 1/2 x 1/2,381,pc,17
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 3/4 x 3/4,524,pc,10
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 1 x 1,715,pc,12
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 1-1/4 x 1-1/4,868,pc,14
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 1-1/2 x 1-1/2,1106,pc,18
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 2 x 2,1465,pc,18
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 1/2 x 1,524,pc,26
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 1/2 x  2,885,pc,29
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 5/8 x 1-1/4,624,pc,26
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 1 x 1-1/2,885,pc,11
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 1 x 2,1059,pc,11
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 1 x 3,1422,pc,26
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 2 x 3,1784,pc,20
+1,material,Stainless Steel,SS Tubular 202 1.5 mm 2 x 4,2144,pc ,26
+1,material,Cutting Disc,"Oasis 4""",20,pc ,16
+1,material,Cutting Disc,"Sunrise 4""",25,pc ,23
+1,material,Cutting Disc,"Tylin 4""",45,pc,19
+1,material,Cutting Disc,"Nicazza cut off 14""",130,pc,14
+1,material,Insulation Foam,Single 5mm x 50m,2000,pc ,30
+1,material,Insulation Foam,Double 5mm x 50m,2500,pc ,16
+1,material,Insulation Foam,Single 10mm x 50m,2900,pc,14
+1,material,Insulation Foam,Double 10mm x 50m,3250,pc,16
+1,material,Gypsum Board,MR (Moisture Resistant) Knauf 9mm,740,pc,16
+1,material,Gypsum Board,MR (Moisture Resistant) Knauf 12 mm,860,pc,21
+1,material,Gypsum Board,MR (Moisture Resistant) Gyproc 12 mm,820,pc,29
+1,material,Gypsum Board,MR (Moisture Resistant) Pirated FR Knauf 16 mm,950,pc,25
+1,material,Scaffolding,Schedule 20 set 1.2 x 1.7m,1595,pc,18
+1,material,Scaffolding,Schedule 20 set 1.2 x 1.2m,1495,pc,30
+1,material,Scaffolding,Schedule 20 set 1.2 x 0.9m,1395,pc,14
+1,material,Scaffolding,Schedule 40 set 1.2 x 1.7m,1950,pc,21
+1,material,Scaffolding,Schedule 40 set 1.2 x 1.2m,1850,pc,26
+1,material,Scaffolding,Schedule 40 set 1.2 x 0.9m,1695,pc,20
+1,material,Chicken Wire,"Gauge #22 1"" x 4ft x 30 yards",1610,m,22
+1,material,Steel Ladder ,.42 x 2.5m,1950,pc,17
+1,material,H-Frame,Schedule 20 1.2 x 1.7m,649,pc,14
+1,material,H-Frame,Schedule 20 1.2 x 1.2m,599,pc,28
+1,material,H-Frame,Schedule 20 1.2 x 0.9m,549,pc,10
+1,material,H-Frame,Schedule 40 1.2 x 1.7m,895,pc,15
+1,material,H-Frame,Schedule 40 1.2 x 1.2m,795,pc,15
+1,material,H-Frame,Schedule 40 1.2 x 0.9m,745,pc,15
+1,material,Cross Brace,2m,175,pc ,12
+1,material,Cross Brace,2.24m,180,pc,21
+1,material,Catwalk,0.40 x 1.8m,980,pc,22
+1,material,Swivel Clamp,"1-1/2"" x 1-1/2""",45,pc,17
+1,material,Fixed Clamp,"1-1/2"" x 1-1/2""",45,pc,24
+1,material,Swivel Clamp,"2"" x 2""",66,pc,12
+1,material,Fixed Clamp,"2"" x 2""",66,pc,29
+1,material,Forged Swivel/Fixed Clamp,1/1/2002,129,pc,11
+1,material,Beam Clamp,1/1/2002,148,pc,16
+1,material,Sleeve Coupler,1/1/2002,135,pc,20
+1,material,Pipe Washer,Need description,18,pc,24
+1,material,A Clamp Assembly,Need description,18,pc,25
+1,material,Joint Pin,Need description,25,pc,14
+1,material,Steel Cone,Need description,65,pc,19
+1,material,Lock Pin,Need description,10,pc,14
+1,material,Flange Nut,12mm,58,pc,13
+1,material,Flange Nut,17mm,68,pc,18
+1,material,Wing Nut,12mm,26,pc,14
+1,material,Wing Nut,17mm,29,pc,22
+1,material,Tie Rod,12mm,330,pc,27
+1,material,Tie Rod,17mm,610,pc,30
+1,material,Caster Wheel,"6""",499,pc,19
+1,material,Caster Wheel,"8""",650,pc,27
+1,material,Hook for Ladder,-,45,pc,28
+1,material,Shoring Jack,Sch40 3.4m 10kgs,730,pc,14
+1,material,Shoring Jack,Sch40 3.4m 10.5kgs,845,pc,26
+1,material,Shoring Jack,Sch40 3.8m,995,pc,22
+1,material,Shoring Jack,Sch40 4.5m,119,pc,29
+1,material,Shoring Jack,Sch40 5.5m,1489,pc,26
+1,material,Base Jack,27 x 400mm,164,pc,17
+1,material,Base Jack,27 x 600mm,221,pc,14
+1,material,Base Jack,32 x 400mm,205,pc,24
+1,material,Base Jack,32 x 600mm,277,pc,16
+1,material,U-Head,27 x 400mm,170,pc,23
+1,material,U-Head,27 x 600mm,227,pc,30
+1,material,U-Head,32 x 400mm,211,pc,19
+1,material,U-Head,32 x 600mm,283,pc,15
+1,material,Telescopic U-Head,1.2m,265,pc,27
+1,material,Telescopic U-Head,1.5m,295,pc,10
+1,material,Aluma Beam,6m 122x 75,2960,pc,20
+1,material,Aluma Beam,6m 122 x 85,3950,pc,11
+1,material,Aluma Beam,6m 140 x 85,4555,pc,24
+1,material,Form Oil,18 Liters Pail,1200,pc,22
+1,material,Form Oil,200 Liters Drum,11200,pc,24
+1,material,Tie Wire,AA GI Wire No. 16 1 Kilo (SKU 012865),147,pc,30
+1,material,Tie Wire,AA GI Wire No. 18 1 Kilo (SKU 012866),160,pc,12
+1,material,Sand,"White Sand, (<1.5 cu.m., capacity of 1 mini dump truck)",3500,cu.m,30
+1,material,Sand,Bistay Palitada Sand (SKU 001950) 25 KG,50,bag,27
+1,material,Skimcoat,Mondo Skimcoat Powder Sk-1 20 KG,558,bag,13
+1,material,Skimcoat,A-plus 503 One Component Ready to Use Skimcoat Primer 20 KG,689,l,25

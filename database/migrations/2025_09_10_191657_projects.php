@@ -13,15 +13,20 @@ return new class extends Migration
     {
         Schema::create('projects', function(Blueprint $table) {
             $table->id(); // Primary key (bigint unsigned, auto-increment)
-
             $table->foreignId('created_by')
-                ->nullable()
-                ->constrained('users')  // references id on users
-                ->nullOnDelete();       // if user is deleted, set null
-
+                ->constrained('users');
+            $table->string('worker_id')->nullable();
             $table->string('project_name');
-            $table->string('status')->default('active'); // or 'active', etc.
+            $table->text('description')->nullable();
+            $table->string('status')->default('draft');
+            $table->string('remark')->nullable();
+            $table->string('house')->nullable();
+            $table->string('barangay')->nullable();
+            $table->string('city')->nullable();
+            $table->string('province')->nullable();
+            $table->string('zipcode')->nullable();
             $table->timestamps(); // created_at and updated_at
+            $table->softDeletes();
         });
     }
 

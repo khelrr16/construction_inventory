@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Item extends Model
 {
+    use HasFactory;
     protected $fillable = [
+        'warehouse_id',
         'category', 
         'name', 
         'description', 
@@ -14,9 +17,4 @@ class Item extends Model
         'measure',
         'stocks',
     ];
-
-    // public function modifiedBy()
-    // {
-    //     return $this->belongsTo(User::class, 'modified_by');
-    // }
 }
