@@ -106,7 +106,7 @@
 
 <div class="sidebar-footer">
     <div class="user-info">
-        <div class="user-avatar">{{ auth()->user()->name[0] }}</div>
+        <div class="user-avatar"><h1><i class="bi bi-box"></i></h1></div>
         <div class="user-details">
             <div class="user-name">{{ auth()->user()->name }}</div>
             <div class="user-role">{{ auth()->user()->role }}</div>

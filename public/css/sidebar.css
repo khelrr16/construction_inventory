@@ -3,7 +3,7 @@
 :root {
   --sidebar-width: 250px;
   --sidebar-bg: linear-gradient(180deg, #f39c12, #e67e22);
-  --sidebar-color: #e9ecef;
+  --sidebar-color: black;
   --sidebar-active: rgba(255, 255, 255, 0.25);
   --sidebar-hover: rgba(255, 255, 255, 0.25);
 }
@@ -117,14 +117,13 @@ body {
 .user-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background-color: var(--sidebar-active);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 10px;
   font-weight: bold;
-  color: white;
+  color: black;
+  size: 10px;
 }
 
 .user-details {
