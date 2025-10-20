@@ -57,7 +57,12 @@ class RedirectController extends Controller
 
     public function admin_warehouses(){
         $warehouses = Warehouse::all();
-        return view('admin.warehouses', compact('warehouses'));
+        return view('admin.warehouse.warehouses', compact('warehouses'));
+    }
+
+    public function admin_warehouse_view($warehouse_id){
+        $warehouse = Warehouse::findOrFail($warehouse_id);
+        return view('admin.warehouse.warehouse-view', compact('warehouse'));
     }
 
     public function requests_new_resources(){

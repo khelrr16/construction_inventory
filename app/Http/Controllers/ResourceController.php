@@ -62,7 +62,7 @@ class ResourceController extends Controller
                     'resource_id' => $resource->id,
                     'item_id'    => $index,
                     'quantity'   => 1,
-                    'status' => 'draft',
+                    'status' => 'Draft',
                 ]);
             }
             return redirect()

@@ -54,6 +54,10 @@ Route::middleware(['auth','role:admin'])->group(function(){
 
     Route::get('/admin/warehouses/', [RedirectController::class, 'admin_warehouses'])
         ->name('admin.warehouses');
+    
+    Route::get('/admin/warehouses/{warehouse_id}', [RedirectController::class, 'admin_warehouse_view'])
+        ->name('admin.warehouse.view');
+
 
     // ---- Warehouse
     Route::post('/admin/warehouses/new', [WarehouseController::class, 'warehouse_new'])
@@ -85,6 +89,7 @@ Route::middleware(['auth','role:admin'])->group(function(){
 
 // WORKER
 Route::middleware(['auth','role:admin,site_worker'])->group(function(){
+    
     //Redirect
     Route::get('/worker/project/{project_id}/view/', [RedirectController::class, 'worker_project_view'])
         ->name('worker.project.view');

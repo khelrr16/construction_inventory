@@ -1,6 +1,6 @@
-@extends('layouts.others.layout')
+@extends('layouts.worker.layout')
 
-@section('title', 'Title')
+@section('title', 'Project Resource (Add)')
 
 @section('content')
     <div class="container mt-5 fs-5">
@@ -34,6 +34,11 @@
             <div class="card-header d-flex justify-content-between align-items-start">
                 <div>
                     <h2 class="card-title mb-0 fw-bold">
+                        <a class="text-decoration-none"
+                            href="{{ route('worker.resource.edit', $resource->id) }}">
+                            <i class="bi bi-arrow-left"></i>
+                        </a>
+                        
                         {{ $resource->project->project_name }}
 
                         <!-- Button trigger modal -->
@@ -103,26 +108,9 @@
             </div>
 
             <div class="card-body">
-                <div class="tab-pane fade show @if(session('active_tab') == $resource->id) active @endif" id="resource" role="tabpanel">
-                    <form action="{{ route('worker.resource_item.add.complete',  $resource->id) }}"
-                        id="projectForm" method="POST">
-                        @csrf
-                        
-                        <!-- Display Table -->
-                        <livewire:items-table :resource_id="$resource->id"/>
-
-                        <!-- Buttons -->
-                        <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 p-3">
-                            <!-- Back Button -->
-                            <a href="{{ route('worker.resource.edit', $resource->id) }}"
-                                class="btn btn-secondary w-100 w-sm-auto">Back</a>
-                            <!-- Save Button -->
-                            <button
-                                type="submit" id="btnSave" class="btn btn-primary w-100 w-sm-auto">
-                                Add Items
-                            </button>
-                        </div>
-                    </form>
+                <div class="tab-pane fade show @if(session('active_tab') == $resource->id) active @endif" id="resource" role="tabpanel">                        
+                    <!-- Display Table -->
+                    <livewire:items-table :resource_id="$resource->id"/>
                 </div>
             </div>
         </div>

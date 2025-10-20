@@ -7,7 +7,7 @@
 
     <!-- Sidebar -->
     <nav id="sidebar">
-        @include('layouts.admin.sidebar')
+        @include('layouts.worker.sidebar')
     </nav>
 
     <!-- Main Content -->

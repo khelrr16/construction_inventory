@@ -4,7 +4,8 @@
             type="text"
             class="border rounded px-3 py-2 w-1/4 text-sm focus:outline-none focus:ring focus:border-blue-300"
             placeholder="Search items..."
-            wire:model.live.debounce.500ms="search"
+            {{-- wire:model.live.debounce.500ms="search" --}}
+            wire:model.live="search"
         >
         
         @if(count($selectedItems) > 0)
@@ -16,7 +17,6 @@
                 Clear Selections
             </button>
 
-            <!-- Bootstrap 5 Modal Trigger -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#selectedModal">
                 Selected Items: ({{ count($selectedItems) }})
             </button>
@@ -65,7 +65,6 @@
                     <td>
                         <input 
                             type="checkbox"
-                            name="resource_items[{{ $item->id }}]"
                             wire:change="toggleItem({{ $item->id }})"
                             {{ in_array($item->id, $selectedItems) ? 'checked' : '' }}
                             class="form-check-input"
@@ -86,7 +85,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="text-center text-muted">Resources unavailable</td>
+                    <td colspan="6" class="text-center text-muted">No result found.</td>
                 </tr>
             @endforelse
         </tbody>
@@ -142,23 +141,16 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    {{-- <button type="button" class="btn btn-primary" wire:click="addItemsToResource"
+                    
+                    <button type="button" 
+                            class="btn btn-primary" 
+                            wire:click="addItemsToResource({{ $resource->id }})"
+                            wire:loading.attr="disabled"
                             @if(count($selectedItems) === 0) disabled @endif>
-                    </button> --}}
+                        Add Items
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Add this script to handle modal closing after successful submission -->
-<script>
-document.addEventListener('livewire:initialized', function() {
-    Livewire.on('close-modal', () => {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('selectedModal'));
-        if (modal) {
-            modal.hide();
-        }
-    });
-});
-</script>

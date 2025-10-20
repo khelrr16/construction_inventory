@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Item;
 use Livewire\Component;
 use App\Models\ProjectResource;
+use App\Models\ProjectResourceItem;
 
 class ItemsTable extends Component
 {
@@ -14,6 +15,8 @@ class ItemsTable extends Component
     public $resource_id;
     public $selectedItems = [];
     
+    public $isAdding = false;
+    
     protected $queryString = [
         'search' => ['except' => ''],
     ];
@@ -21,6 +24,16 @@ class ItemsTable extends Component
     public function mount()
     {
         $this->selectedItems = [];
+    }
+
+    public function sortBy(string $field): void
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
     }
 
     public function toggleItem($itemId)
@@ -44,14 +57,28 @@ class ItemsTable extends Component
         $this->selectedItems = [];
     }
 
-    public function sortBy(string $field): void
-    {
-        if ($this->sortField === $field) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            $this->sortField = $field;
-            $this->sortDirection = 'asc';
+    public function addItemsToResource($resource_id){
+        if ($this->isAdding) {
+            return;
         }
+
+        $this->isAdding = true;
+
+        $resource = ProjectResource::findOrFail($resource_id);
+        
+        foreach ($this->selectedItems as $item_id) {
+            ProjectResourceItem::create([
+                'project_id' => $resource->project_id,
+                'resource_id' => $resource->id,
+                'item_id'    => $item_id,
+                'quantity'   => 1,
+                'status' => 'draft',
+            ]);
+        }
+
+        return redirect()
+            ->route('worker.resource.edit', $resource->id)
+            ->with(['success' =>'Items added successfully!']);
     }
 
     public function render()

@@ -1,4 +1,4 @@
-@extends('layouts.others.layout')
+@extends('layouts.clerk.layout')
 
 @section('title', 'Title')
 

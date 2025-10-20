@@ -30,11 +30,16 @@
         @endif
 
         <div class="card shadow-sm mb-4">
-            {{-- Header --}}
-            <div class="card-header d-flex justify-content-between align-items-start">
-                <div>
-                    <h2 class="card-title mb-0 fw-bold">{{ $project->project_name }}</h2>
-                </div>
+        {{-- Header --}}
+        <div class="card-header d-flex justify-content-between align-items-start">
+            <h2 class="card-title mb-0 fw-bold">
+                <a href="{{ route('admin.projects') }}"
+                    class="text-decoration-none">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                {{ $project->project_name }}
+            </h2>
+            
             <div class="text-end">
                 <span class="badge bg-primary mt-2 fs-5">{{ ucwords($project->status) }}</span>
             </div>
@@ -241,6 +246,11 @@
                                                                 <th class="col-2">Name</th>
                                                                 <th class="col-4">Description</th>
                                                                 <th class="col-1">Quantity</th>
+                                                                @if(in_array($resource->status, ['Incomplete','Complete']))
+                                                                    <th class="col-1">Complete</th>
+                                                                    <th class="col-1">Missing</th>
+                                                                    <th class="col-1">Broken</th>
+                                                                @endif
                                                                 <th class="col-1">Cost</th>
                                                                 <th class="col-1">Status</th>
                                                             </tr>
@@ -261,6 +271,13 @@
                                                                     <td>
                                                                         {{ $item->quantity . ' ' . $item->details->measure}}
                                                                     </td>
+
+                                                                    @if(in_array($resource->status, ['Incomplete','Complete']))
+                                                                        <td class="col-1">{{ $resource->complete ?? '0' }}</td>
+                                                                        <td class="col-1">{{ $resource->missing ?? '0' }}</td>
+                                                                        <td class="col-1">{{ $resource->broken ?? '0' }}</td>
+                                                                    @endif
+                                                                    
                                                                     <td class="text-end pe-3">
                                                                         ₱{{ number_format($item->details->cost * $item->quantity, 2) }}</td>
                                                                     <td>{{ $item->status }}</td>
@@ -302,7 +319,7 @@
 
                                                             <div class="text-end ms-3">
                                                                 <small class="text-muted d-block">{{ $status->created_at->format('h:i A') }}</small>
-                                                                <small class="text-muted">{{ $status->created_at->format('F j, Y') }}</small>
+                                                                <small class="text-muted d-block">{{ $status->created_at->format('F j, Y') }}</small>
                                                             </div>
                                                         </li>
                                                     @empty
@@ -311,13 +328,6 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <!-- Buttons -->
-                                    <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 p-3">
-                                        <!-- Back Button -->
-                                        <a href="{{ route('admin.projects') }}"
-                                            class="btn btn-secondary w-100 w-sm-auto">Back</a>
                                     </div>
                                 </div>
                             </div>

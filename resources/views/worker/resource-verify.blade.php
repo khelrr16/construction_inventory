@@ -1,6 +1,6 @@
-@extends('layouts.others.layout')
+@extends('layouts.worker.layout')
 
-@section('title', 'Title')
+@section('title', 'Project Resource (Verify)')
 
 @section('content')
     <div class="container mt-5 fs-5">

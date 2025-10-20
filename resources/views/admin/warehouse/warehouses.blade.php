@@ -51,6 +51,12 @@
                                 {{ ($warehouse->barangay . ', ' . $warehouse->city . ', ' . $warehouse->province) ?? 'N/A' }}
                             </p>
                         </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <!-- Project status badges -->
+                            <a href="{{ route('admin.warehouse.view', $warehouse->id) }}" class="btn btn-light btn-lg border">
+                                <i class="bi bi-gear"></i>
+                            </a>
+                        </div>
                     </div>
                 @empty
                 <div class="container text-secondary text-center p-2">

@@ -3,83 +3,55 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <div class="container py-4">
-      {{-- Metrics Row --}}
-      <div class="row g-3 mb-4">
-        <div class="col-md-3">
-          <div class="card card-metric p-3">
-            <div class="d-flex justify-content-between">
-              <small class="text-muted">Total Items</small>
-              <i class="bi bi-box"></i>
-            </div>
-            <h4 class="fw-bold">1,247</h4>
-            <small class="text-success">+12% from last month</small>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card card-metric p-3">
-            <div class="d-flex justify-content-between">
-              <small class="text-muted">Items Received Today</small>
-              <i class="bi bi-graph-up-arrow"></i>
-            </div>
-            <h4 class="fw-bold">23</h4>
-            <small class="text-success">+5 from yesterday</small>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card card-metric p-3">
-            <div class="d-flex justify-content-between">
-              <small class="text-muted">Low Stock Items</small>
-              <i class="bi bi-exclamation-triangle"></i>
-            </div>
-            <h4 class="fw-bold">8</h4>
-            <small class="text-warning">3 critical</small>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card card-metric p-3">
-            <div class="d-flex justify-content-between">
-              <small class="text-muted">Completed Deliveries</small>
-              <i class="bi bi-check-circle"></i>
-            </div>
-            <h4 class="fw-bold">156</h4>
-            <small class="text-success">+8 this week</small>
-          </div>
-        </div>
-      </div>
 
-      {{-- Recent Activity --}}
-      <div class="card recent-card">
-        <div class="card-header bg-white fw-bold">Recent Activity</div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div>
-              <span class="dot"></span>
-              <strong>Steel Beams - 20ft</strong>
-              <div class="text-muted small">Received 15 units</div>
+    <main class="content">
+        <header>
+            <h1>CONTRUCKTOR</h1>
+            <p>Project Dashboard</p>
+        </header>
+
+        <div class="card-container">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="card-info">
+                    <h3>12</h3>
+                    <p>Completed Projects</p>
+                </div>
             </div>
-            <small class="text-muted">2 hours ago</small>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div>
-              <span class="dot"></span>
-              <strong>Concrete Mix - 50lb bags</strong>
-              <div class="text-muted small">Received 100 units</div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-clock"></i></div>
+                <div class="card-info">
+                    <h3>5</h3>
+                    <p>Pending Projects</p>
+                </div>
             </div>
-            <small class="text-muted">4 hours ago</small>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div>
-              <span class="dot"></span>
-              <strong>Safety Helmets</strong>
-              <div class="text-muted small">Received 60 units</div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-users"></i></div>
+                <div class="card-info">
+                    <h3>7</h3>
+                    <p>Active Projects</p>
+                </div>
             </div>
-            <small class="text-muted">6 hours ago</small>
-          </li>
-        </ul>
-      </div>
+        </div>
+    </main>
+
+
+<div class="overlay" id="overlay"></div>
+
+<div class="popup-container" id="createProjectPanel">
+    <div class="panel-content">
+        <h4><i class="fas fa-folder-plus"></i> New Project</h4>
+
+        <label class="mt-3">Project Name</label>
+        <input type="text" class="form-control" placeholder="Enter project name">
+
+        <label class="mt-3">Project Description</label>
+        <textarea class="form-control" rows="3" placeholder="Enter description"></textarea>
+
+        <div class="d-flex justify-content-end mt-4">
+            <button id="closePanelBtn" class="btn btn-light border me-2">Cancel</button>
+            <button class="btn btn-success"><i class="fas fa-check-circle"></i> Save</button>
+        </div>
     </div>
-
-    {{-- Bootstrap Icons CDN --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</div>
 @endsection

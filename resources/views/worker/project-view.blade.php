@@ -1,6 +1,6 @@
-@extends('layouts.others.layout')
+@extends('layouts.worker.layout')
 
-@section('title', 'Title')
+@section('title', 'Project View')
 
 @section('content')
     <div class="container mt-5 fs-5">
@@ -326,6 +326,11 @@
                                                                     <th class="col-2">Name</th>
                                                                     <th class="col-4">Description</th>
                                                                     <th class="col-1">Quantity</th>
+                                                                    @if(in_array($resource->status, ['Incomplete','Complete']))
+                                                                        <th class="col-1">Completed</th>
+                                                                        <th class="col-1">Missing</th>
+                                                                        <th class="col-1">Broken</th>
+                                                                    @endif
                                                                     <th class="col-1">Cost</th>
                                                                     <th class="col-1">Status</th>
                                                                 </tr>
@@ -346,6 +351,11 @@
                                                                         <td>
                                                                             {{ $item->quantity . ' ' . $item->details->measure}}
                                                                         </td>
+                                                                        @if(in_array($resource->status, ['Incomplete','Complete']))
+                                                                            <td class="col-1">{{ $item->completed ?? '0' }}</td>
+                                                                            <td class="col-1">{{ $item->missing ?? '0' }}</td>
+                                                                            <td class="col-1">{{ $item->broken ?? '0' }}</td>
+                                                                        @endif
                                                                         <td class="text-end pe-3">
                                                                             ₱{{ number_format($item->details->cost * $item->quantity, 2) }}</td>
                                                                         <td>{{ $item->status }}</td>
@@ -407,7 +417,6 @@
                                             </a>
 
                                             @if($resource->status === 'Delivered')
-                                            <!-- Back Button -->
                                             <a href="{{ route('worker.resource.verify', $resource->id) }}"
                                                 class="btn btn-success w-100">
                                                 Verify

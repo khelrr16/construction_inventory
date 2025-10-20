@@ -1,4 +1,4 @@
-@extends('layouts.others.layout')
+@extends('layouts.clerk.layout')
 
 @section('title', 'Title')
 
@@ -31,7 +31,7 @@
         
         <h3>Requested Resources</h3>
         <hr>
-        @forelse($warehouses as $warehouse)
+        @forelse($warehouses as $w_index => $warehouse)
             @if($warehouse->pendingResources->isNotEmpty())
                 <h3>Warehouse: {{ $warehouse->name }}</h3>
                 @foreach($warehouse->pendingResources as $index => $resource)
@@ -39,9 +39,9 @@
                         {{-- Header --}}
                         <div class="card-header d-flex justify-content-between align-items-start"
                             data-bs-toggle="collapse"
-                            data-bs-target="#resource-{{ $index }}" 
+                            data-bs-target="#resource-{{ $w_index.'-'.$index }}" 
                             aria-expanded="false" 
-                            aria-controls="resource-{{ $index }}" 
+                            aria-controls="resource-{{ $w_index.'-'.$index }}" 
                             style="cursor: pointer;">
                             
                             <div>
@@ -68,7 +68,7 @@
                         </div>
 
                         {{-- Body --}}
-                        <div id="resource-{{ $index }}" class="collapse">
+                        <div id="resource-{{ $w_index.'-'.$index }}" class="collapse">
                             <div class="card-body">
                                 {{-- Project Overview --}}
                                 <h4 class="fw-bold text-primary">
@@ -108,9 +108,9 @@
                                             <h5 class="mb-0"
                                                 style="cursor:pointer;"
                                                 data-bs-toggle="modal" 
-                                                data-bs-target="#resourceDetailsModal{{ $index }}">
-                                                Resource <i class="bi bi-info-circle"></i></h5>
-                                            
+                                                data-bs-target="#resourceDetailsModal{{ $w_index.'-'.$index }}">
+                                                Resource <i class="bi bi-info-circle"></i>
+                                            </h5>                                            
                                         </div>
                                         
                                         <!-- Display Table -->
@@ -176,11 +176,11 @@
                     </div>
 
                     <!-- Details Modal -->
-                    <div class="modal fade" id="resourceDetailsModal{{ $index }}" tabindex="-1" aria-labelledby="resourceDetailsModalLabel{{ $index }}" aria-hidden="true">
+                    <div class="modal fade" id="resourceDetailsModal{{ $w_index.'-'.$index }}" tabindex="-1" aria-labelledby="resourceDetailsModalLabel{{ $w_index.'-'.$index }}" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="resourceDetailsModal{{ $index }}">
+                                    <h5 class="modal-title" id="resourceDetailsModal{{ $w_index.'-'.$index }}">
                                         Resource Details
                                     </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

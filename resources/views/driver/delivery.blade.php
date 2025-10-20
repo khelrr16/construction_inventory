@@ -1,6 +1,6 @@
-@extends('layouts.others.layout')
+@extends('layouts.driver.layout')
 
-@section('title', 'Title')
+@section('title', 'Delivery')
 
 @section('content')
     <div class="container mt-5 fs-5">

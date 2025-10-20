@@ -1,4 +1,4 @@
-@extends('layouts.others.layout')
+@extends('layouts.driver.layout')
 
 @section('title', 'Title')
 
@@ -29,7 +29,7 @@
         </div>
         @endif
         
-        @foreach($resources as $index => $resource)
+        @forelse($resources as $index => $resource)
             <div class="card shadow-sm mb-4">
                 {{-- Header --}}
                 <div class="card-header d-flex justify-content-between align-items-start"
@@ -248,7 +248,9 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <h1 class="text-center">No pending delivery.</h1>
+        @endforelse
     
     </div>
 @endsection
