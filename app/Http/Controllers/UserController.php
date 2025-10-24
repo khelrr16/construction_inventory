@@ -29,7 +29,7 @@ class UserController extends Controller
         // Optionally log in
         auth()->guard()->login($user);
 
-        return redirect(route('/'));
+        return redirect()->route('home');
     }
 
     public function admin_updateRole(Request $request, $user_id){

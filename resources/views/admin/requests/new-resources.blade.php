@@ -3,10 +3,10 @@
 @section('title', 'Title')
 
 @section('content')
-    <div class="container mt-5 fs-5">
-        <!-- Alert -->
+    <!-- Toast Alert -->
+    <div>
         @if (session('success'))
-        <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+        <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
             <div id="liveToast" class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
@@ -16,8 +16,23 @@
                 </div>
             </div>
         </div>
+        @elseif ($errors->any())
+        <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
+            @foreach($errors->all() as $error)
+                <div id="liveToastError" class="toast align-items-center text-bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            {{ $error }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
         @endif
-        
+    </div>
+
+    <div class="container mt-5 fs-5">        
         @forelse($resources as $index => $resource)
             <div class="card shadow-sm mb-4">
                 {{-- Header --}}
@@ -33,7 +48,10 @@
                             {{ $resource->project->project_name }} 
                             <span class="badge bg-warning mt-2 fs-5">{{ ucwords($resource->status) }}</span>
                         </h2>
-                        <p class="mt-2"><i>Remarks:</i> {{ $resource->remark ?? 'N/A'}} </p>
+                        <p class="mt-2">
+                            <i class="bi bi-box-seam-fill"></i> {{ $resource->warehouse->name }}
+                        </p>
+                        <i>Remarks:</i> {{ $resource->remark ?? 'N/A'}}
                         
                     </div>
                     <div class="text-end">
@@ -171,30 +189,12 @@
                                             <form action="" method="POST">
                                                 @csrf @method('PUT')
                                                 <div class="modal-body">
-                                                    <!-- Assign -->
-                                                    <div class="mt-3">
-                                                        <label for="warehouse" class="form-label fw-bold">Warehouse</label>
-                                                        <select name="warehouse_id" id="warehouse" class="form-control" required>
-                                                            <option selected disabled>--</option>
-                                                            @if($warehouses)
-                                                                @foreach($warehouses as $warehouse)
-                                                                    <option 
-                                                                        @if($resource->warehouse_id == $warehouse->id) selected @endif 
-                                                                        value="{{ $warehouse->id }}">
-                                                                        {{$warehouse->name}}
-                                                                    </option>
-                                                                @endforeach
-                                                            @endif
-                                                        </select>
-                                                    </div>
-                                                    
                                                     <!-- Remarks -->
-                                                    <div class="col-12 mt-4">
+                                                    <div class="col-12">
                                                         <label for="remark" class="form-label fw-bold">Remarks</label>
                                                         <textarea name="remark" id="remark" class="form-control" rows="3"
                                                             placeholder="">{{ $resource->remark ?? ''}}</textarea>
                                                     </div>
-                                                    
                                                 </div>
 
                                                 <!-- Footer -->

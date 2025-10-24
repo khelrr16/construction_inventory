@@ -15,6 +15,7 @@ class ProjectResource extends Model
         'warehouse_id',
         'prepared_by',
         'driver_id',
+        'vehicle_id',
         'approved_by',
         'remark',
         'schedule',

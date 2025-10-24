@@ -12,9 +12,13 @@ use Illuminate\Support\Facades\Auth;
 
 class ResourceController extends Controller
 {
-    public function resource_new($project_id){
+    public function resource_new(Request $request, $project_id){
+        $request->validate([
+            'warehouse_id' => 'required',
+        ]);
         ProjectResource::create([
             'project_id' => $project_id,
+            'warehouse_id' => $request->warehouse_id,
             'created_by' => auth()->guard()->id(),
             'status' => 'draft',
         ]);
@@ -33,7 +37,7 @@ class ResourceController extends Controller
         if($submit === 'true'){
             $resource_items = ProjectResourceItem::where('resource_id', $resource_id)->get();
             if($resource_items->isEmpty()){
-                return back()->withErrors(['error' =>'No items were added!'])
+                return back()->withErrors('No items were added!')
                     ->with('active_tab', $resource_id)
                     ->withFragment('resourceTabsContent');
             }
@@ -69,7 +73,7 @@ class ResourceController extends Controller
                 ->route('worker.resource.edit', $resource->id)
                 ->with(['success' =>'Resource added successfully!']);
         }
-        return back()->withErrors(['error' =>'No items selected!'])
+        return back()->withErrors('No items selected!')
             ->with('active_tab', $resource_id);
     }
 
@@ -81,7 +85,7 @@ class ResourceController extends Controller
             }
             return back()->with(['success' =>'Resource items updated successfully!'])->withFragment('resourcesTable');
         }
-        return back()->withErrors(['error' =>'No items were found!'])
+        return back()->withErrors('No items were found!')
             ->with('active_tab', $resource_id)
             ->withFragment('resourcesTable');
     }
@@ -98,7 +102,7 @@ class ResourceController extends Controller
             return back()->with(['success' =>'Resource items removed successfully!'])->withFragment('resourcesTable');
         
         }
-        return back()->withErrors(['error' =>'No items selected!'])
+        return back()->withErrors('No items selected!')
             ->with('active_tab', $resource_id)
             ->withFragment('resourcesTable');
     }
@@ -106,11 +110,9 @@ class ResourceController extends Controller
     public function request_update_resource(Request $request, $resource_id, $value){
         $resource = ProjectResource::findOrFail($resource_id);
         $resource_items = ProjectResourceItem::where('resource_id', $resource_id)->get();
-        $request->validate(['warehouse_id' => 'required']);
 
         if($value){
             $resource->update([
-                'warehouse_id' => $request->warehouse_id,
                 'approved_by' => Auth::id(),
                 'remark' => $request->remark,
                 'status' => 'to be packed',
@@ -184,10 +186,10 @@ class ResourceController extends Controller
             $item = Item::findOrFail($resource_item->item_id);
             
             if($supplied != $resource_item->quantity){
-                return back()->with('error','Quantity and supply do not match.');
+                return back()->withErrors('Quantity and supply do not match.');
             }
             else if($supplied > $item->stocks){
-                return back()->with('error','Insufficient stocks.');
+                return back()->withErrors('Insufficient stocks.');
             }
         }
         $request->validate(['driver_id' => 'required']);
@@ -199,10 +201,10 @@ class ResourceController extends Controller
         
         foreach($resource_items as $index => $item){
             if($item->supplied > $stock_items[$item->item_id]->stocks){
-                return back()->withErrors([' Invalid input! Not enough stocks.']);
+                return back()->withErrors(' Invalid input! Not enough stocks.');
             }
             if($item->supplied > $item->quantity){
-                return back()->withErrors(['Invalid input! Too much supply.']);
+                return back()->withErrors('Invalid input! Too much supply.');
             }
         }
 
@@ -223,10 +225,10 @@ class ResourceController extends Controller
             'description' => 'All items have been supplied. It is now ready for delivery.',
         ]);
 
-        return redirect()->route('clerk.projects')->with('success', value: 'Resource is ready for delivery!');
+        return redirect()->route('clerk.requests')->with('success', value: 'Resource is ready for delivery!');
     }
 
-    public function resource_delivery_update($resource_id, $action){
+    public function resource_delivery_update(Request $request, $resource_id, $action){        
         $resource = ProjectResource::findOrFail($resource_id);
         $resource_items = ProjectResourceItem::where('resource_id', $resource_id)->get();
         $itemresource_status = null;
@@ -234,6 +236,9 @@ class ResourceController extends Controller
         $description = null;
 
         if($action === 'start'){
+            $request->validate([
+                'vehicle_id' => 'required',
+            ]);
             $itemresource_status = 'on delivery';
             $status = 'On Delivery';
             $description = 'Resource is being delivered.';
@@ -256,8 +261,8 @@ class ResourceController extends Controller
         ]);
 
         return $action == 'start'
-        ? redirect()->route('driver.delivery', $resource_id)->with('success', 'Resource is ready for delivery!')
-        : redirect()->route('driver.projects')->with('success', 'Resource Delivery is updated.');
+        ? back()->with('success', 'Resource is ready for delivery!')
+        : back()->with('success', 'Resource Delivery is updated.');
     }
 
     public function resource_verify_complete(Request $request, $resource_id){
@@ -278,7 +283,7 @@ class ResourceController extends Controller
 
             if (($completed + $missing + $broken) != $expected) {
                 return back()
-                    ->with('error', "Total quantity did not match.")
+                    ->withErrors( 'Total quantity did not match.')
                     ->withInput();
             }
 

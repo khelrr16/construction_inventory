@@ -3,8 +3,8 @@
 @section('title', 'User Management')
 
 @section('content')
-    <div class="container mt-5">
-        <!-- Alert -->
+    <!-- Toast Alert -->
+    <div>
         @if (session('success'))
         <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
             <div id="liveToast" class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
@@ -16,19 +16,23 @@
                 </div>
             </div>
         </div>
-        @elseif (session('error'))
+        @elseif ($errors->any())
         <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
-            <div id="liveToastError" class="toast align-items-center text-bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        {{ session('error') }}
+            @foreach($errors->all() as $error)
+                <div id="liveToastError" class="toast align-items-center text-bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            {{ $error }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
-            </div>
+            @endforeach
         </div>
         @endif
+    </div>
 
+    <div class="container mt-5">
         <ul class="nav nav-tabs" id="userWarehouseTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="users-tab" data-bs-toggle="tab" data-bs-target="#users"
@@ -115,14 +119,13 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>
-
                                         <form action="{{ route('admin.user.updateWarehouse', $user->id) }}" method="POST"
                                             class="d-flex">
                                             @csrf
                                             <select name="warehouse_id" class="form-select me-2">
                                                 <option disabled {{ $user->warehouse ? '' : 'selected' }}>--</option>
                                                 @foreach($warehouses as $warehouse)
-                                                    <option value="{{ $warehouse->id }}" {{ $user->warehouse ? ($user->warehouse->id == $warehouse->id ? 'selected' : '') : '' }}>
+                                                    <option value="{{ $warehouse->id }}" {{ $user->warehouse ? ($user->warehouse->warehouse_id == $warehouse->id ? 'selected' : '') : '' }}>
                                                         {{ $warehouse->name }}
                                                     </option>
                                                 @endforeach

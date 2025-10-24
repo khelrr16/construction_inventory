@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\User;
+use App\Models\Vehicle;
 use App\Models\Projects;
 use App\Models\Warehouse;
 use App\Models\WarehouseUser;
@@ -19,9 +20,9 @@ class RedirectController extends Controller
             case 'site_worker':
                 return redirect(route('worker.projects'));
             case 'inventory_clerk':
-                return redirect(route('clerk.projects'));
+                return redirect(route('clerk.requests'));
             case 'driver':
-                return redirect(route('driver.projects'));
+                return redirect(route('driver.pending'));
             default:
                 return view('user');
         }
@@ -61,7 +62,7 @@ class RedirectController extends Controller
     }
 
     public function admin_warehouse_view($warehouse_id){
-        $warehouse = Warehouse::findOrFail($warehouse_id);
+        $warehouse = Warehouse::with(['users'])->findOrFail($warehouse_id);
         return view('admin.warehouse.warehouse-view', compact('warehouse'));
     }
 
@@ -76,7 +77,9 @@ class RedirectController extends Controller
     // SITE WORKER
 
     public function worker_projects(){
-        $projects = Projects::where('status', 'processing')->get();
+        $projects = auth()->guard()->user()->role == 'admin'
+        ? Projects::where('status', 'processing')->get()
+        : Projects::where('worker_id', auth()->guard()->user()->id)->get();
         
         return view('worker.projects', compact('projects'));
     }
@@ -95,8 +98,10 @@ class RedirectController extends Controller
             ->where('project_id', $project->id)
             ->get()
             ->reverse();
+        
+        $warehouses = Warehouse::where('status','active')->get();
 
-        return view('worker.project-view', compact(['project','resources']));
+        return view('worker.project-view', compact(['project','resources','warehouses']));
     }
 
     
@@ -120,7 +125,7 @@ class RedirectController extends Controller
             'project.worker',
         ])
         ->findOrFail($resource_id);
-
+        
         return view('worker.resource-edit',compact('resource'));
     }
 
@@ -130,12 +135,11 @@ class RedirectController extends Controller
             'project',
             'project.owner',
             'project.worker',
+            'warehouse',
         ])
         ->findOrFail($resource_id);
-        $resource_items = $resource->items;
-        $availableItems = Item::all();
 
-        return view('worker.resource-add',compact(['resource', 'availableItems']));
+        return view('worker.resource-add',compact(['resource']));
     }
 
     public function worker_project_verify($resource_id){
@@ -154,16 +158,43 @@ class RedirectController extends Controller
 
     // INVENTORY CLERK
 
-    public function clerk_projects(){
-        $warehouses = Warehouse::with([
-            'pendingResources.items',
-            'pendingResources.preparer',
-            'pendingResources.driver',
-            'pendingResources.project.worker',
-            'pendingResources.project.owner'
-        ])->get();
+    public function clerk_warehouses(){
+        $warehouses = Warehouse::with(['users','items'])->get();
+        return view('clerk.warehouses', compact('warehouses'));
+    }
 
-        return view('clerk.projects', compact('warehouses'));
+    public function clerk_requests()
+    {   
+        $user = auth()->guard()->user();
+        
+        if($user->role == 'admin'){
+            $resources = ProjectResource::whereIn('status', ['pending','to be packed'])
+                ->with([
+                    'warehouse',
+                    'items',
+                    'preparer',
+                    'driver',
+                    'project.worker',
+                    'project.owner'
+                ])
+                ->get();
+        } else {
+            $resources = ProjectResource::whereIn('status', ['pending','to be packed'])
+                ->whereHas('warehouse.warehouseUsers', function($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+                ->with([
+                    'warehouse',
+                    'items',
+                    'preparer',
+                    'driver',
+                    'project.worker',
+                    'project.owner'
+                ])
+                ->get();
+        }
+
+        return view('clerk.requests', compact('resources'));
     }
 
     public function clerk_preparation($resource_id){   
@@ -182,15 +213,25 @@ class RedirectController extends Controller
         return view('clerk.preparation', compact('resource','drivers'));
     }
 
-    public function clerk_inventory(){
-        $items = Item::all();
-        return view('clerk.inventory', compact('items'));
+    public function clerk_inventory($warehouse_id){
+        $warehouse = Warehouse::with('users')->findOrFail($warehouse_id);
+        $items = Item::where('warehouse_id', $warehouse_id)->get();
+        return view('clerk.inventory', compact('warehouse','items'));
+    }
+    
+    public function clerk_item_edit($item_id){
+        $item = Item::findOrFail($item_id);
+        return view('clerk.item-edit', compact('item'));
     }
 
     // DRIVER
 
-    public function driver_projects(){
-        $resources = ProjectResource::with([
+    public function driver_pending(){
+        $user = auth()->guard()->user();
+
+        if($user->role == 'admin'){
+            $vehicles = Vehicle::all();
+            $resources = ProjectResource::with([
                 'items',
                 'warehouse',
                 'creator',
@@ -199,14 +240,33 @@ class RedirectController extends Controller
                 'approver',
                 'project.worker',
             ])
-            ->whereIn('status',['to be delivered', 'on delivery'])
+            ->where('status','to be delivered')
             ->get();
+        } else {
+            $vehicles = Vehicle::where('registered_by', $user->id)->get();
+            $resources = ProjectResource::with([
+                'items',
+                'warehouse',
+                'creator',
+                'preparer',
+                'driver',
+                'approver',
+                'project.worker',
+            ])
+            ->where('driver_id', $user->id)
+            ->where('status','to be delivered')
+            ->get();
+        }
+        
 
-        return view('driver.projects', compact('resources'));
+        return view('driver.pending', compact('resources', 'vehicles'));
     }
 
-    public function driver_delivery($resource_id){
-        $resource = ProjectResource::with([
+    public function driver_deliveries(){
+        $user = auth()->guard()->user();
+
+        if($user->role == 'admin'){
+            $resources = ProjectResource::with([
                 'items',
                 'warehouse',
                 'creator',
@@ -215,8 +275,36 @@ class RedirectController extends Controller
                 'approver',
                 'project.worker',
             ])
-            ->findOrFail($resource_id);
+            ->where('status','to be delivered')
+            ->get();
+        } else {
+            $resources = ProjectResource::with([
+                'items',
+                'warehouse',
+                'creator',
+                'preparer',
+                'driver',
+                'approver',
+                'project.worker',
+            ])
+            ->where('driver_id', $user->id)
+            ->where('status','on delivery')
+            ->get();
+        }
+        
+        return view('driver.deliveries', compact('resources'));
+    }
 
-        return view('driver.delivery', compact('resource'));
+    public function driver_vehicles(){
+        $vehicles = Vehicle::where('registered_by', auth()->guard()->id())
+        ->get();
+
+        return view('driver.vehicle.vehicles', compact('vehicles'));
+    }
+
+    public function driver_vehicle_edit($vehicle_id){
+        $vehicle = Vehicle::findOrFail($vehicle_id);
+
+        return view('driver.vehicle.vehicle-edit', compact('vehicle'));
     }
 }

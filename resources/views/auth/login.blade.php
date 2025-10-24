@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css" />
     <title>Sign in</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{  asset('css/authentication.css') }}">
 </head>
 
@@ -26,32 +27,40 @@
                         <input type="password" name="password" placeholder="Password" required />
                     </div>
                     <input type="submit" value="Login" class="btn solid" />
+                    
+                    <a class="forgot-password"
+                        href="{{ route('password.request') }}">
+                        Forgot Password?
+                    </a>
+
                     @if($errors->login->any())
                     <div class="note">
                         @if(session('retryAfter'))
-                            Too many attempts. Please wait 
-                            <span id="countdown">{{ session('retryAfter') }}</span> seconds.
-                            <script>
-                                (function(){
-                                    let timeLeft = {{ session('retryAfter') }};
-                                    const countdownEl = document.getElementById("countdown");
-                                    const loginBtn = document.querySelector("button[type=submit]");
+                            <div id="lockoutAlert">
+                                Too many attempts. Please wait 
+                                <span id="countdown">{{ session('retryAfter') }}</span> seconds.
+                                <script>
+                                    (function(){
+                                        let timeLeft = {{ session('retryAfter') }};
+                                        const countdownEl = document.getElementById("countdown");
+                                        const loginBtn = document.querySelector("button[type=submit]");
 
-                                    if(loginBtn) loginBtn.disabled = true;
+                                        if(loginBtn) loginBtn.disabled = true;
 
-                                    const timer = setInterval(() => {
-                                        timeLeft--;
-                                        countdownEl.textContent = timeLeft;
+                                        const timer = setInterval(() => {
+                                            timeLeft--;
+                                            countdownEl.textContent = timeLeft;
 
-                                        if (timeLeft <= 0) {
-                                            clearInterval(timer);
-                                            const alert = document.getElementById('lockoutAlert');
-                                            if (alert) alert.remove();
-                                            if(loginBtn) loginBtn.disabled = false;
-                                        }
-                                    }, 1000);
-                                })();
-                            </script>
+                                            if (timeLeft <= 0) {
+                                                clearInterval(timer);
+                                                const alert = document.getElementById('lockoutAlert');
+                                                if (alert) alert.remove();
+                                                if(loginBtn) loginBtn.disabled = false;
+                                            }
+                                        }, 1000);
+                                    })();
+                                </script>
+                            </div>
                         @else
                             @foreach ($errors->login->all() as $error)
                                 <p>{{ $error }}</p>
@@ -124,6 +133,15 @@
             </div>
         </div>
     </div>
+
+    <audio id="bgMusic" loop>
+        <source src="{{ asset('music/bg1.mp3') }}" type="audio/mpeg">
+    </audio>
+    
+    <!-- Fixed Mute Button -->
+    <button class="btn btn-light shadow mute-btn-fixed" onclick="toggleMute()" id="muteBtn" title="Mute/Unmute">
+        <i class="bi bi-volume-up-fill" id="volumeIcon"></i>
+    </button>
 </body>
 
 <script>
@@ -138,7 +156,44 @@
     sign_in_btn.addEventListener("click", () => {
         container.classList.remove("sign-up-mode");
     });
-
+    
+    const audio = document.getElementById('bgMusic');
+    const muteBtn = document.getElementById('muteBtn');
+    const volumeIcon = document.getElementById('volumeIcon');
+    
+    // Set initial volume
+    audio.volume = 0.3;
+    
+    // Auto-play when user interacts with the page
+    function startMusic() {
+        audio.play().then(() => {
+            console.log('Background music started');
+        }).catch(error => {
+            console.log('Auto-play prevented');
+        });
+    }
+    
+    // Start music on any user interaction
+    document.addEventListener('click', function() {
+        if (audio.paused) {
+            startMusic();
+        }
+    }, { once: true });
+    
+    // Toggle mute/unmute
+    function toggleMute() {
+        audio.muted = !audio.muted;
+        
+        if (audio.muted) {
+            volumeIcon.className = 'bi bi-volume-mute-fill';
+            muteBtn.classList.remove('btn-light');
+            muteBtn.classList.add('btn-outline-light');
+        } else {
+            volumeIcon.className = 'bi bi-volume-up-fill';
+            muteBtn.classList.remove('btn-outline-light');
+            muteBtn.classList.add('btn-light');
+        }
+    }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

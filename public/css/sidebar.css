@@ -122,7 +122,7 @@ body {
   justify-content: center;
   margin-right: 10px;
   font-weight: bold;
-  color: black;
+  color: var(--sidebar-color);
   size: 10px;
 }
 
@@ -138,6 +138,17 @@ body {
 .user-role {
   font-size: 0.8rem;
   opacity: 0.8;
+}
+
+.user-logout {
+  color: var(--sidebar-color);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.user-logout:hover {
+  color: #b02a37;
 }
 
 /* Main Content Styles */
@@ -198,7 +209,7 @@ body {
 #sidebar .collapsible-menu .submenu {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.3s ease, width 0.3s ease;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     margin: 5px 10px;
@@ -283,8 +294,9 @@ body {
   #sidebar .collapsible-menu .submenu {
     position: absolute;
     left: 70px;
-    top: 0;
-    width: 180px;
+    top: auto;
+    width: 0px;
+    transform:translateY(-50px);
     background: var(--sidebar-bg);
     z-index: 1001;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
@@ -302,6 +314,11 @@ body {
 
   .user-avatar {
     margin-right: 0;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -331,6 +348,10 @@ body {
 
   #sidebar.active {
     transform: translateX(0);
+  }
+
+  #sidebar.active .collapsible-menu .submenu{
+    width: 70px;
   }
 
   #content {

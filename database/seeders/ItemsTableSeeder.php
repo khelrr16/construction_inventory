@@ -14,7 +14,6 @@ class ItemsTableSeeder extends Seeder
         // Load the CSV
         $csv = Reader::createFromPath(database_path('seeders/items_new.csv'), 'r');
         $csv->setHeaderOffset(0); // first row is the header
-
         foreach ($csv as $record) {
             DB::table('items')->insert([
                 'warehouse_id'    => $record['warehouse_id'],

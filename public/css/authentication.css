@@ -68,7 +68,7 @@ form.sign-in-form {
   font-size: 2.2rem;
   color: #ffa41b;
   margin-bottom: 10px;
-  text-shadow: 0 0 10px #333 0 0 33px #96751b;
+  text-shadow: 0 0 10px #333, 0 0 33px #96751b;
 }
 
 .input-field {
@@ -106,6 +106,12 @@ form.sign-in-form {
 .input-field input::placeholder {
   color: #aaa;
   font-weight: 500;
+}
+
+.forgot-password{
+  text-decoration:none;
+  color: white;
+  text-shadow: black 2px 2px 0px, #f0f0f0 0px 0px 20px;
 }
 
 .note{
@@ -155,10 +161,12 @@ form.sign-in-form {
   right: 48%;
   transform: translateY(-50%);
   /* background-image: linear-gradient(-45deg, #F86F03 0%, #FFA41B 100%); */
-  background-image: url('../img/circle-image2.jpg');
+  /* background-image: url('../img/circle-image2.jpg'); */
+  background-image: url('../img/meribeth.jpg');
   background-repeat: no-repeat;
-  background-position: right;
-  background-size: cover;
+  background-position-x: center;
+  background-position-y: 28em;
+  background-size:contain;
   -moz-box-shadow: 1px 2px 20px rgba(0,0,0,.5);
   -webkit-box-shadow: 1px 2px 20px rgba(0,0,0,.5);
   box-shadow: 1px 2px 20px rgba(0,0,0,.5);
@@ -197,6 +205,7 @@ form.sign-in-form {
   color: #fff;
   transition: transform 0.9s ease-in-out;
   transition-delay: 0.6s;
+  text-shadow: 0 0 10px #333, 0 0 33px #96751b;
 }
 
 .panel h3 {
@@ -394,4 +403,25 @@ form.sign-in-form {
     bottom: 28%;
     left: 50%;
   }
+}
+
+/* Music */
+.mute-btn-fixed {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 9999;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size:medium;
+    opacity: 0.5;
+}
+
+.mute-btn-fixed:hover {
+    transform: scale(1.1);
 }

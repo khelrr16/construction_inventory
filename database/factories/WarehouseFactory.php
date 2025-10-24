@@ -23,6 +23,7 @@ class WarehouseFactory extends Factory
             'city'     => fake()->city(),                   // e.g. "Quezon City"
             'province' => fake()->state(),                  // e.g. "Metro Manila"
             'zipcode'  => fake()->postcode(),               // e.g. "1100"
+            'status' => 'active',
         ];
     }
 }

@@ -28,13 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
             parentLi.classList.toggle('active');
             
             // Close other open menus (optional)
-            if (window.innerWidth >= 768) {
-                collapsibleMenus.forEach(otherMenu => {
-                    if (otherMenu !== this) {
-                        otherMenu.parentElement.classList.remove('active');
-                    }
-                });
-            }
+            collapsibleMenus.forEach(otherMenu => {
+                if (otherMenu !== this) {
+                    otherMenu.parentElement.classList.remove('active');
+                }
+            });
         });
     });
 

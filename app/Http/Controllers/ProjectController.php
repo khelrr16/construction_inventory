@@ -31,7 +31,7 @@ class ProjectController extends Controller
 
     public function update(Request $request, $id, $submit){
         $request->validate([
-            'worker_id' => 'integer|required',
+            'worker_id' => 'required|exists:users,id',
             'description' => 'required|string|max:255',
             'house' => 'required|max:255',
             'barangay' => 'required|max:255',
@@ -39,8 +39,10 @@ class ProjectController extends Controller
             'province' => 'required|max:255',
             'zipcode' => 'integer|required|max:10000',
         ]);
+
         $project = Projects::findOrFail($id);
         $project->update($request->all());
+        
         if($submit === 'true'){
             $project->update(['status' => 'processing']);
             return redirect()->route('admin.projects')->with('success', $project->project_name.' started processing!');

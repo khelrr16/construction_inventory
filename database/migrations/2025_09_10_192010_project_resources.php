@@ -31,6 +31,10 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('users');
 
+            $table->foreignId('vehicle_id')
+                ->nullable()
+                ->constrained('vehicles');
+
             $table->foreignId('approved_by')
                 ->nullable()
                 ->constrained('users');

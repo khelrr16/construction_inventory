@@ -41,7 +41,7 @@ class LoginController extends Controller
 
             return ($user->role === 'admin')
                 ? redirect()->route('admin')
-                : redirect()->intended('/');
+                : redirect()->intended();
         }
 
         // on failure, increment attempts

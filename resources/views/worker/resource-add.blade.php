@@ -3,8 +3,8 @@
 @section('title', 'Project Resource (Add)')
 
 @section('content')
-    <div class="container mt-5 fs-5">
-        <!-- Alert -->
+    <!-- Toast Alert -->
+    <div>
         @if (session('success'))
         <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
             <div id="liveToast" class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
@@ -16,19 +16,23 @@
                 </div>
             </div>
         </div>
-        @elseif (session('error'))
+        @elseif ($errors->any())
         <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
-            <div id="liveToastError" class="toast align-items-center text-bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        {{ session('error') }}
+            @foreach($errors->all() as $error)
+                <div id="liveToastError" class="toast align-items-center text-bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            {{ $error }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
-            </div>
+            @endforeach
         </div>
         @endif
+    </div>
 
+    <div class="container mt-5 fs-5">
         <div class="card shadow-sm mb-4">
             {{-- Header --}}
             <div class="card-header d-flex justify-content-between align-items-start">
@@ -103,15 +107,13 @@
 
                 <div class="text-end">
                     <!-- Project status badges -->
-                    <span class="badge bg-secondary fs-5">{{ ucfirst($resource->status) }}</span>
+                    <span class="badge bg-primary fs-5">{{ ucfirst($resource->project->status) }}</span>
                 </div>
             </div>
 
             <div class="card-body">
-                <div class="tab-pane fade show @if(session('active_tab') == $resource->id) active @endif" id="resource" role="tabpanel">                        
-                    <!-- Display Table -->
-                    <livewire:items-table :resource_id="$resource->id"/>
-                </div>
+                <!-- Display Table -->
+                <livewire:items-table :resource_id="$resource->id"/>
             </div>
         </div>
     </div>

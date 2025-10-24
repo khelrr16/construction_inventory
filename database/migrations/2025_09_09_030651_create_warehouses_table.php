@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('province');
             $table->string('zipcode');
+            $table->string('status');
             $table->timestamps();
         });
     }

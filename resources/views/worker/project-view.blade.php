@@ -3,8 +3,8 @@
 @section('title', 'Project View')
 
 @section('content')
-    <div class="container mt-5 fs-5">
-        <!-- Alert -->
+    <!-- Toast Alert -->
+    <div>
         @if (session('success'))
         <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
             <div id="liveToast" class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
@@ -16,24 +16,34 @@
                 </div>
             </div>
         </div>
-        @elseif (session('error'))
+        @elseif ($errors->any())
         <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
-            <div id="liveToastError" class="toast align-items-center text-bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        {{ session('error') }}
+            @foreach($errors->all() as $error)
+                <div id="liveToastError" class="toast align-items-center text-bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            {{ $error }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
-            </div>
+            @endforeach
         </div>
         @endif
+    </div>
 
+    <div class="container mt-5 fs-5">
         <div class="card shadow-sm mb-4">
             {{-- Header --}}
             <div class="card-header d-flex justify-content-between align-items-start">
                 <div>
-                    <h2 class="card-title mb-0 fw-bold">{{ $project->project_name }}</h2>
+                    <h2 class="card-title mb-0 fw-bold">
+                        <a href="{{ route('worker.projects') }}"
+                            class="text-decoration-none">
+                            <i class="bi bi-arrow-left"></i>
+                        </a>
+                        {{ $project->project_name }}
+                    </h2>
                 </div>
                 <div class="text-end">
                     <span class="badge bg-primary mt-2 fs-5">{{ ucwords($project->status) }}</span>
@@ -90,14 +100,60 @@
                         </ul>
                     </div>
 
-                    <!-- Add Button (sticks to right) -->
-                    <form onsubmit="return confirm('Are you sure you want to create new resource?');"
-                        action="{{ route('worker.resource.new', $project->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-success ms-2 fw-bold" type="button">
-                            + Add
-                        </button>
-                    </form>
+                    <button style="cursor:pointer;"
+                        data-bs-toggle="modal" 
+                        data-bs-target="#addResourceModal"
+                        class="btn btn-success ms-2 fw-bold">
+                            +Add
+                    </button>
+
+                    <!-- Add Resource Modal -->
+                    <div class="modal fade" id="addResourceModal" tabindex="-1" aria-labelledby="addResourceModalLabel" aria-hidden="true">
+                        <form action="{{ route('worker.resource.new', $project->id) }}" method="POST">
+                            @csrf
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addResourceModalLabel">
+                                            Select Warehouse
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @forelse($warehouses as $index => $warehouse)
+                                            <label class="d-flex justify-content-between align-items-center border p-3 mb-3 bg-light bg-gradient" for="warehouseRadio{{ $warehouse->id }}">
+                                                <div class="me-2">
+                                                    <h4 class="mb-1 fw-bold">{{ $warehouse->name }}</h4>
+                                                    <p class="mb-1">
+                                                        <i class="bi bi-geo-alt"></i>
+                                                        {{ ($warehouse->house . ', ' . $warehouse->zipcode) ?? 'N/A' }}
+                                                    </p>
+                                                    <p class="mb-1">
+                                                        {{ ($warehouse->barangay . ', ' . $warehouse->city . ', ' . $warehouse->province) ?? 'N/A' }}
+                                                    </p>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="badge bg-primary">{{ ucwords($warehouse->status) }}</span>
+                                                    <!-- Project status badges -->
+                                                    <input class="form-check-input" type="radio" name="warehouse_id" id="warehouseRadio{{ $warehouse->id }}" value="{{ $warehouse->id }}">
+                                                </div>
+                                            </label>
+                                        @empty
+                                        <div class="container text-secondary text-center p-2">
+                                            No warehouse.
+                                        </div>
+                                        @endforelse
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-success" type="submit"
+                                            onclick="this.disabled=true; this.form.submit();">
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- Tab Content -->
@@ -280,10 +336,6 @@
 
                                             <!-- Buttons -->
                                             <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 p-3">
-                                                <!-- Back Button -->
-                                                <a href="{{ route('admin.projects') }}"
-                                                    class="btn btn-secondary w-100 w-sm-auto">Back</a>
-
                                                 <!-- Edit Button -->
                                                 <a href="{{ route('worker.resource.edit', $resource->id) }}"
                                                     id="btnRequest" class="btn btn-warning w-100 w-sm-auto">
@@ -410,12 +462,6 @@
                                         </div>
                                         
                                         <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 p-3">
-                                            <!-- Back Button -->
-                                            <a href="{{ route('worker.projects') }}"
-                                                class="btn btn-secondary w-100">
-                                                Back
-                                            </a>
-
                                             @if($resource->status === 'Delivered')
                                             <a href="{{ route('worker.resource.verify', $resource->id) }}"
                                                 class="btn btn-success w-100">

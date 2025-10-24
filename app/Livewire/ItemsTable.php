@@ -92,6 +92,7 @@ class ItemsTable extends Component
         
         $items = Item::query()
             ->whereNotIn('id', $usedItemIds)
+            ->where('warehouse_id', $resource->warehouse_id)
             ->where(function ($query) {
                 $query->where('name', 'like', "%{$this->search}%")
                     ->orWhere('description', 'like', "%{$this->search}%");

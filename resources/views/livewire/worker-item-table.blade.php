@@ -1,5 +1,21 @@
 <div class="table-responsive p-3">
     <div class="flex justify-between mb-3">
+
+        <!-- Warehouse -->
+        <div class="mb-5">
+            <h5 class="fw-bold">Warehouse:</h5>
+            @if($resource->warehouse)
+                {{ $resource->warehouse->name }} 
+                <br> {{ $resource->warehouse->house
+                .', '.$resource->warehouse->zipcode }}
+                <br> {{ $resource->warehouse->barangay
+                .', '.$resource->warehouse->city
+                .', '.$resource->warehouse->province }}
+            @else
+                N/A
+            @endif
+        </div>
+
         <input
             type="text"
             class="border rounded px-3 py-2 w-1/4 text-sm focus:outline-none focus:ring focus:border-blue-300"
@@ -27,8 +43,7 @@
     <table class="table table-striped table-hover mb-0">
         <thead class="table-dark">
             <tr>
-                <th width="50px">Select</th>
-                <th width="60px">No.</th>
+                <th class="text-center" width="60px">No.</th>
                 <th wire:click="sortBy('name')" style="cursor:pointer;">
                     Name
                     @if ($sortField === 'name')
@@ -62,7 +77,7 @@
                     wire:click="toggleItem({{ $item->id }})"
                     style="cursor: pointer;"
                 >
-                    <td>
+                    <td class="d-none">
                         <input 
                             type="checkbox"
                             wire:change="toggleItem({{ $item->id }})"
@@ -70,7 +85,7 @@
                             class="form-check-input"
                         >
                     </td>
-                    <td>{{ $index + 1}}</td>
+                    <td class="text-center">{{ $index + 1}}</td>
                     <td>
                         @if($item->category === 'material')
                             <i class="bi bi-box"></i>

@@ -15,10 +15,24 @@ class Warehouse extends Model
         'city',
         'province',
         'zipcode',
+        'status',
     ];
 
-    public function pendingResources(){
-        return $this->hasMany(ProjectResource::class, 'warehouse_id')
-            ->whereIn('status', ['to be packed','packing']);
+    public function projectResources()
+    {
+        return $this->hasMany(ProjectResource::class, 'warehouse_id');
+    }
+
+    public function warehouseUsers(){
+        return $this->hasMany(WarehouseUser::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'warehouse_users');
+    }
+
+    public function items(){
+        return $this->hasMany(Item::class, 'warehouse_id');
     }
 }

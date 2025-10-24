@@ -10,4 +10,9 @@ class WarehouseUser extends Model
         'user_id',
         'warehouse_id',
     ];
+
+    public function warehouse(){
+        return $this->hasOne(Warehouse::class, 'warehouse_id');
+    }
+
 }

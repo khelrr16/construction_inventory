@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Odd Mint',
             'email' => 'admin@gmail.com',
-            'contact_number' => '09911223344',
+            'contact_number' => '09123456781',
             'role' => 'admin',
             'password' => 'asdjklasdjkl',
         ]);
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'War Care',
             'email' => 'worker@gmail.com',
-            'contact_number' => '09911223344',
+            'contact_number' => '09123456782',
             'role' => 'site_worker',
             'password' => 'asdjklasdjkl',
         ]);
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Claire Erk',
             'email' => 'clerk@gmail.com',
-            'contact_number' => '09911223344',
+            'contact_number' => '09123456783',
             'role' => 'inventory_clerk',
             'password' => 'asdjklasdjkl',
         ]);
@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Dry Bear',
             'email' => 'driver@gmail.com',
-            'contact_number' => '09911223344',
+            'contact_number' => '09123456784',
             'role' => 'driver',
             'password' => 'asdjklasdjkl',
         ]);

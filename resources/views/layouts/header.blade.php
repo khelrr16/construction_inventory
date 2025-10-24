@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
     <title>@yield('title')</title>
     @livewireStyles
+    
+    @yield('styles')
 </head>
 
 </html>
