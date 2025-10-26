@@ -275,7 +275,7 @@ class RedirectController extends Controller
                 'approver',
                 'project.worker',
             ])
-            ->where('status','to be delivered')
+            ->where('status','on delivery')
             ->get();
         } else {
             $resources = ProjectResource::with([
