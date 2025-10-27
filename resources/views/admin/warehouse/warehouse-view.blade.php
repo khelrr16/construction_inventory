@@ -66,7 +66,7 @@
                     </h4>
                     @forelse($warehouse->users as $user)
                         <p class="mb-1">
-                            {{ $user->name }} 
+                            <b>{{ $user->name }}</b>
                             <br>
                             {{ $user->employeeCode() }}
                         </p>
@@ -77,7 +77,8 @@
                     @endforelse
                 </div>
 
-                <livewire:warehouse-items :warehouseId="$warehouse->id"/>
+                {{-- <livewire:warehouse-items :warehouseId="$warehouse->id"/> --}}
+                @include('parts.tables.item-table-1')
 
                 {{-- <div class="table-responsive">
                     <table class="table table-hover table-striped align-middle text-center mb-0">

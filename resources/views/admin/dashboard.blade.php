@@ -169,13 +169,12 @@
         </div>
     </div>
 
-    <!-- Recent Activities -->
+    {{-- <!-- Recent Activities -->
     <div class="row">
         <div class="col-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Recent Activities</h6>
-                    {{-- <a href="{{ route('admin.resources.index') }}" class="btn btn-sm btn-primary">View All</a> --}}
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">
@@ -205,7 +204,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 @endsection
 

@@ -1,14 +1,6 @@
-@extends('layouts.worker.layout')
+@extends('layouts.admin.layout')
 
-@section('title', 'Project View')
-
-@section('styles')
-    <style>
-        .bg-card{
-            
-        }
-    </style>
-@endsection
+@section('title', 'Title')
 
 @section('content')
     <!-- Toast Alert -->
@@ -78,63 +70,6 @@
                             @endforelse
                         </ul>
                     </div>
-
-                    @if($project->status == 'active')
-                        <button style="cursor:pointer;"
-                            data-bs-toggle="modal" 
-                            data-bs-target="#addResourceModal"
-                            class="btn btn-success ms-2 fw-bold">
-                                +Add
-                        </button>
-
-                        <!-- Add Resource Modal -->
-                        <div class="modal fade" id="addResourceModal" tabindex="-1" aria-labelledby="addResourceModalLabel" aria-hidden="true">
-                            <form action="{{ route('worker.resource.new', $project->id) }}" method="POST">
-                                @csrf
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="addResourceModalLabel">
-                                                Select Warehouse
-                                            </h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            @forelse($warehouses as $index => $warehouse)
-                                                <label class="d-flex justify-content-between align-items-center border p-3 mb-3 bg-light bg-gradient" for="warehouseRadio{{ $warehouse->id }}">
-                                                    <div class="me-2">
-                                                        <h4 class="mb-1 fw-bold">{{ $warehouse->name }}</h4>
-                                                        <p class="mb-1">
-                                                            <i class="bi bi-geo-alt"></i>
-                                                            {{ ($warehouse->house . ', ' . $warehouse->zipcode) ?? 'N/A' }}
-                                                        </p>
-                                                        <p class="mb-1">
-                                                            {{ ($warehouse->barangay . ', ' . $warehouse->city . ', ' . $warehouse->province) ?? 'N/A' }}
-                                                        </p>
-                                                    </div>
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <span class="badge bg-primary">{{ ucwords($warehouse->status) }}</span>
-                                                        <!-- Project status badges -->
-                                                        <input class="form-check-input" type="radio" name="warehouse_id" id="warehouseRadio{{ $warehouse->id }}" value="{{ $warehouse->id }}">
-                                                    </div>
-                                                </label>
-                                            @empty
-                                            <div class="container text-secondary text-center p-2">
-                                                No warehouse.
-                                            </div>
-                                            @endforelse
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-success" type="submit"
-                                                onclick="this.disabled=true; this.form.submit();">
-                                                Add
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    @endif
                 </div>
 
                 <!-- Tab Content -->
@@ -185,8 +120,9 @@
                                 <div class="tab-content" id="pills-tabContent">
                                     <div class="tab-pane fade show active" id="pills-resources{{$index}}" role="tabpanel" aria-labelledby="pills-resources-tab{{$index}}">
                                         <!-- Resources Table -->
-                                        <div class="card shadow-sm mt-4">
-                                            <div class="card-header d-flex justify-content-between align-items-center bg-primary">
+                                        <div class="card shadow-sm mt-4" id="resourcesTable">
+                                            <div
+                                                class="card-header d-flex justify-content-between align-items-center bg-primary">
                                                 <h5 class="mb-0 text-white"
                                                     style="cursor:pointer;"
                                                     data-bs-toggle="modal" 
@@ -215,25 +151,6 @@
                                             
                                             <!-- Display Table -->
                                             @include('parts.tables.table-1')
-
-                                            <!-- Buttons -->
-                                            @if($project->status == 'active' && $resource->status == 'draft')
-                                                <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 p-3">
-                                                    <!-- Edit Button -->
-                                                    <a href="{{ route('worker.resource.edit', $resource->id) }}"
-                                                        id="btnRequest" class="btn btn-warning w-100 w-sm-auto">
-                                                        Edit
-                                                    </a>
-                                                </div>
-                                            @elseif($project->status == 'active' && $resource->status == 'delivered')
-                                                <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 p-3">
-                                                    <!-- Verify Button -->
-                                                    <a href="{{ route('worker.resource.verify', $resource->id) }}"
-                                                        id="btnRequest" class="btn btn-success w-100 w-sm-auto">
-                                                        Verify
-                                                    </a>
-                                                </div>
-                                            @endif
                                         </div>
                                     </div>
 

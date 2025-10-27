@@ -52,7 +52,6 @@
                             <i class="bi bi-box-seam-fill"></i> {{ $resource->warehouse->name }}
                         </p>
                         <i>Remarks:</i> {{ $resource->remark ?? 'N/A'}}
-                        
                     </div>
                     <div class="text-end">
                         <span class="text-danger fw-bold">
@@ -72,95 +71,41 @@
                 {{-- Body --}}
                 <div id="resource-{{ $index }}" class="collapse">
                     <div class="card-body">
-                        {{-- Project Overview --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-box-seam"></i> Project Overview
-                        </h4>
-                        <p class="mb-5 text-muted">{{ $resource->project->description ?? 'No description provided' }}</p>
-
-                        {{-- Location --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-geo-alt"></i> Location
-                        </h4>
-                        <p class="mb-1">{{ ($resource->project->house . ', ' . $resource->project->zipcode) ?? 'N/A' }}</p>
-                        <p class="mb-5">{{ ($resource->project->province . ', ' . $resource->project->city . ', ' . $resource->project->barangay) ?? 'N/A' }}</p>
-
-                        {{-- Project Owner --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-person"></i> Project Owner
-                        </h4>
-                        <p class="mb-1"><strong>Name:</strong> {{ $resource->project->owner->name ?? 'N/A' }}</p>
-                        <p class="mb-1"><strong>Phone:</strong> {{ $resource->project->owner->contact_number ?? 'N/A' }}</p>
-                        <p class="mb-5"><strong>Email:</strong> {{ $resource->project->owner->email ?? 'N/A' }}</p>
-
-                        {{-- Assigned --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-check2-circle"></i> Assigned
-                        </h4>
-                        <p class="mb-1"><strong>Worker:</strong> {{ $resource->project->worker->name ?? 'N/A' }}</p>
-                        <p class="mb-1"><strong>ID:</strong> {{ 'WRK-'.str_pad($resource->project->worker->id,3,'0',STR_PAD_LEFT) ?? 'N/A' }}</p>
-
-                        <hr class="mt-5">
+                        @php $project = $resource->project; @endphp
+                        @include('parts.details.project-details')
 
                         <div class="card-body p-0">
                             <!-- Resources Table -->
-                            <div class="card shadow-sm mt-4" id="resourcesTable">
-                                <div
-                                    class="card-header d-flex justify-content-between align-items-center bg-secondary text-white">
-                                    <h5 class="mb-0">Resource {{ $resource->id }}</h5>
+                            <div class="card shadow-sm mt-4">
+                                <div class="card-header d-flex justify-content-between align-items-center bg-primary">
+                                    <h5 class="mb-0 text-white"
+                                        style="cursor:pointer;"
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#resourceDetailsModal{{ $index }}">
+                                        Resource <i class="bi bi-info-circle"></i>
+                                    </h5>
+
+                                    <!-- Details Modal -->
+                                    <div class="modal fade" id="resourceDetailsModal{{ $index }}" tabindex="-1" aria-labelledby="resourceDetailsModalLabel{{ $index }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="resourceDetailsModalLabel{{ $index }}">
+                                                        Resource Details
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    @include('parts.details.resource-details')
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <!-- Display Table -->
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped align-middle text-center mb-0">
-                                        <thead class="table-dark text-white">
-                                            <tr>
-                                                <th class="col-1">No.</th>
-                                                <th class="col-2">Name</th>
-                                                <th class="col-4">Description</th>
-                                                <th class="col-1">Quantity</th>
-                                                <th class="col-1">Cost</th>
-                                                <th class="col-1">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($resource->items as $item_index => $item)
-                                                <tr>
-                                                    <td>{{ $item_index + 1 }}</td>
-                                                    <td class="text-start">
-                                                        @if($item->details->category === 'material')
-                                                            <i class="bi bi-box"></i>
-                                                        @else
-                                                            <i class="bi bi-wrench"></i>
-                                                        @endif
-                                                        {{ $item->details->name }}
-                                                    </td>
-                                                    <td class="text-start">{{ $item->details->description }}</td>
-                                                    <td>
-                                                        {{ $item->quantity . ' ' . $item->details->measure}}
-                                                    </td>
-                                                    <td class="text-end pe-3">
-                                                        ₱{{ number_format($item->details->cost * $item->quantity, 2) }}</td>
-                                                    <td>{{ $item->status }}</td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="5" class="text-center text-muted">No resources added yet</td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                        @if($resource->items->isNotEmpty())
-                                            <tfoot class="table-light fw-bold">
-                                                <tr>
-                                                    <td colspan="3"></td>
-                                                    <td>Total:</td>
-                                                    <td class="text-end pe-3">₱{{ number_format($resource->items->sum(fn($item) => $item->details->cost * $item->quantity), 2) }}</td>
-                                                    <td></td>
-                                                </tr>
-                                            </tfoot>
-                                        @endif
-                                    </table>
-                                </div>
+                                @include('parts.tables.table-1')
                             </div>
 
                             <!-- Buttons -->
@@ -211,15 +156,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <!-- Back Button -->
-                                <a href="{{ route('admin.requests.resources.update', ['resource_id' => $resource->id, 'value' => '0']) }}"
-                                    class="btn btn-danger w-100 w-sm-auto">Deny</a>
-                                    
-                                <a href="{{ route('admin.requests.resources.update', ['resource_id' => $resource->id, 'value' => '1']) }}"
-                                    class="btn btn-success w-100 w-sm-auto">Accept</a> --}}
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

@@ -72,40 +72,13 @@
                 {{-- Body --}}
                 <div id="resource-{{ $index }}" class="collapse">
                     <div class="card-body">
-                        {{-- Project Overview --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-box-seam"></i> Project Overview
-                        </h4>
-                        <p class="mb-5 text-muted">{{ $resource->project->description ?? 'No description provided' }}</p>
-
-                        {{-- Location --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-geo-alt"></i> Location
-                        </h4>
-                        <p class="mb-1">{{ ($resource->project->house . ', ' . $resource->project->zipcode) ?? 'N/A' }}</p>
-                        <p class="mb-5">{{ ($resource->project->province . ', ' . $resource->project->city . ', ' . $resource->project->barangay) ?? 'N/A' }}</p>
-
-                        {{-- Project Owner --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-person"></i> Project Owner
-                        </h4>
-                        <p class="mb-1"><strong>Name:</strong> {{ $resource->project->owner->name ?? 'N/A' }}</p>
-                        <p class="mb-1"><strong>Phone:</strong> {{ $resource->project->owner->contact_number ?? 'N/A' }}</p>
-                        <p class="mb-5"><strong>Email:</strong> {{ $resource->project->owner->email ?? 'N/A' }}</p>
-
-                        {{-- Assigned --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-check2-circle"></i> Assigned
-                        </h4>
-                        <p class="mb-1"><strong>Worker:</strong> {{ $resource->project->worker->name ?? 'N/A' }}</p>
-                        <p class="mb-1"><strong>ID:</strong> {{ $resource->project->worker->employeeCode() ?? 'N/A' }}</p>
-
-                        <hr class="mt-5">
+                        @php $project = $resource->project @endphp
+                        @include('parts.details.project-details')
 
                         <div class="card-body p-0">
                             <!-- Resources Table -->
-                            <div class="card shadow-sm mt-4" id="resourcesTable">
-                                <div class="card-header d-flex justify-content-between align-items-center bg-secondary">
+                            <div class="card shadow-sm mt-4">
+                                <div class="card-header d-flex justify-content-between align-items-center bg-primary">
                                     <!-- Button trigger modal -->
                                     <h5 class="mb-0 text-white"
                                         style="cursor:pointer;"
@@ -126,118 +99,15 @@
                                                 </div>
 
                                                 <div class="modal-body">
-                                                    <!-- Created by -->
-                                                    <div class="mb-3">
-                                                        <h5 class="fw-bold">Created by:</h5>
-                                                        {{ $resource->creator->name }} 
-                                                        <br> {{ $resource->creator->employeeCode() }}
-                                                    </div>
-
-                                                    <!-- Warehouse -->
-                                                    <div class="mb-3">
-                                                        <h5 class="fw-bold">Warehouse:</h5>
-                                                        @if($resource->warehouse)
-                                                            {{ $resource->warehouse->name }} 
-                                                            <br> {{ $resource->warehouse->house
-                                                            .', '.$resource->warehouse->zipcode }}
-                                                            <br> {{ $resource->warehouse->barangay
-                                                            .', '.$resource->warehouse->city
-                                                            .', '.$resource->warehouse->province }}
-                                                        @else
-                                                            N/A
-                                                        @endif
-                                                    </div>
-
-                                                    <!-- Approved By: -->
-                                                    <div class="mb-3">
-                                                        <h5 class="fw-bold">Approved By:</h5>
-                                                        @if($resource->approver)
-                                                            {{ $resource->approver->name }} 
-                                                            <br> {{ $resource->approver->employeeCode() }}
-                                                        @else
-                                                            N/A
-                                                        @endif
-                                                    </div>
-
-                                                    <!-- Prepared By: -->
-                                                    <div class="mb-3">
-                                                        <h5 class="fw-bold">Prepared By:</h5>
-                                                        @if($resource->preparer)
-                                                            {{ $resource->preparer->name }} 
-                                                            <br> {{ $resource->preparer->employeeCode() }}
-                                                        @else
-                                                            N/A
-                                                        @endif
-                                                    </div>
-
-                                                    <!-- Driver: -->
-                                                    <div class="mb-3">
-                                                        <h5 class="fw-bold">Delivered By:</h5>
-                                                        @if($resource->driver)
-                                                            {{ $resource->driver->name }} 
-                                                            <br> {{ $resource->driver->employeeCode() }}
-                                                        @else
-                                                            N/A
-                                                        @endif
-                                                    </div>
+                                                    @include('parts.details.resource-details')
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
                                 </div>
                                 
                                 <!-- Display Table -->
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped align-middle text-center mb-0">
-                                        <thead class="table-dark text-white">
-                                            <tr>
-                                                <th class="col-1">No.</th>
-                                                <th class="col-2">Name</th>
-                                                <th class="col-4">Description</th>
-                                                <th class="col-1">Quantity</th>
-                                                <th class="col-1">Cost</th>
-                                                <th class="col-1">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($resource->items as $item_index => $item)
-                                                <tr>
-                                                    <td>{{ $item_index + 1 }}</td>
-                                                    <td class="text-start">
-                                                        @if($item->details->category === 'material')
-                                                            <i class="bi bi-box"></i>
-                                                        @else
-                                                            <i class="bi bi-wrench"></i>
-                                                        @endif
-                                                        {{ $item->details->name }}
-                                                    </td>
-                                                    <td class="text-start">{{ $item->details->description }}</td>
-                                                    <td>
-                                                        {{ $item->quantity . ' ' . $item->details->measure}}
-                                                    </td>
-                                                    <td class="text-end pe-3">
-                                                        ₱{{ number_format($item->details->cost * $item->quantity, 2) }}</td>
-                                                    <td>{{ $item->status }}</td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="5" class="text-center text-muted">No resources added yet</td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                        @if($resource->items->isNotEmpty())
-                                            <tfoot class="table-light fw-bold">
-                                                <tr>
-                                                    <td colspan="3"></td>
-                                                    <td>Total:</td>
-                                                    <td class="text-end pe-3">₱{{ number_format($resource->items->sum(fn($item) => $item->details->cost * $item->quantity), 2) }}</td>
-                                                    <td></td>
-                                                </tr>
-                                            </tfoot>
-                                        @endif
-                                    </table>
-                                </div>
+                                @include('parts.tables.table-1')
                             </div>
 
                             <button class="btn btn-success w-100 w-sm-auto"
@@ -252,10 +122,10 @@
                             <div class="modal fade" id="startDeliveryModal{{ $index }}" tabindex="-1" aria-labelledby="startDeliveryModalLabel{{ $index }}" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
-                                        <form action="{{route('driver.delivery.update', ['resource_id' => $resource->id, 'action' => 'start'])}}"
+                                        <form action="{{route('driver.delivery.start', $resource->id)}}"
                                             method="POST">
                                             @csrf @method('PUT')
-
+                                            
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="startDeliveryModalLabel{{ $index }}">
                                                     Choose Vehicle
@@ -267,7 +137,7 @@
                                                 @forelse($vehicles as $index => $vehicle)
                                                     <label class="d-flex justify-content-between align-items-center border p-3 mb-3 bg-light bg-gradient" for="vehicleRadio{{ $vehicle->id }}">
                                                         <div class="me-2">
-                                                            <h4 class="mb-1 fw-bold">{{ $vehicle->type }}</h4>
+                                                            <h4 class="mb-1 fw-bold">{{ ucwords($vehicle->type) }}</h4>
                                                             <medium class="text-muted">Brand: {{ $vehicle->brand }}</medium><br>
                                                             <medium class="text-muted">Color: {{ $vehicle->color }}</medium><br>
                                                             <medium class="text-muted">Model: {{ $vehicle->model }}</medium><br>
@@ -284,16 +154,18 @@
                                                     </label>
                                                 @empty
                                                     <div class="container text-secondary text-center p-2">
-                                                        No vehicles registered.
+                                                        No vehicles available.
                                                     </div>
                                                 @endforelse
                                             </div>
 
-                                            <div class="modal-footer">
-                                                <button class="btn btn-success" type="submit">
-                                                    Start Delivery
-                                                </button>
-                                            </div>
+                                            @if($vehicles->isNotEmpty())
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-success" type="submit">
+                                                        Start Delivery
+                                                    </button>
+                                                </div>
+                                            @endif
                                         </form>
                                     </div>
                                 </div>
@@ -309,7 +181,9 @@
         @endforelse
     
     </div>
+@endsection
 
+@push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var modals = document.querySelectorAll('.modal');
@@ -323,4 +197,4 @@
             });
         });
     </script>
-@endsection
+@endpush

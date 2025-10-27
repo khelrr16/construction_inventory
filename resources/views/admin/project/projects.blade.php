@@ -33,7 +33,7 @@
     </div>    
 
     <!-- Projects Section -->
-    <div class="card shadow-sm">
+    <div class="card shadow-sm fs-5">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="mb-0"><i class="bi bi-folder2-open"></i> Project List (Admin)</h4>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal">
@@ -45,32 +45,22 @@
                 <div class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="me-2">
                         <h4 class="mb-1 fw-bold">{{ $project->project_name }}</h4>
-                        <medium class="text-muted">{{ $project->description }}</medium><br>
-                        <medium class="text-muted">Created: {{ $project->created_at->format('Y-m-d') }}</medium>
+                        <medium class="text-muted">{{ $project->description ?? 'No description provided..' }}</medium><br>
+                        <medium class="text-muted">Resources: {{ count($project->resources) }}</medium><br>
+                        <medium class="text-muted">Created: {{ $project->created_at->format('F j, Y') }}</medium>
                     </div>
                     
                     <div class="d-flex align-items-center gap-2">
                         <!-- Project status badges -->
-                        <span class="badge
-                        @switch($project->status)
-                            @case('processing')
-                                bg-warning @break
-                            @case('completed')
-                                bg-success @break
-                            @case('cancelled') @case('incomplete')
-                                bg-danger @break
-                            @default
-                                bg-secondary @break
-                        @endswitch fs-5">{{ ucfirst($project->status) }}</span>
+                        <x-status-badge status="{{ $project->status }}" class="fs-5" />
                         
                         <a href="{{ route('admin.project.edit', $project->id) }}" class="btn btn-light btn-lg border">
                             <i class="bi bi-gear"></i>
                         </a>
-                        @if($project->status !== 'draft')
-                            <a href="{{ route('admin.project.view', $project->id) }}" class="btn btn-light btn-lg border">
-                                <i class="bi bi-arrow-right-short"></i>
-                            </a>
-                        @endif
+                        
+                        <a href="{{ route('admin.project.view', $project->id) }}" class="btn btn-light btn-lg border">
+                            <i class="bi bi-arrow-right-short"></i>
+                        </a>
                     </div>
                 </div>
             @empty
@@ -121,15 +111,15 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Auto-hide toast messages after 5 seconds
-    const toasts = document.querySelectorAll('.toast');
-    toasts.forEach(toast => {
-        setTimeout(() => {
-            const bsToast = new bootstrap.Toast(toast);
-            bsToast.hide();
-        }, 5000);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-hide toast messages after 5 seconds
+        const toasts = document.querySelectorAll('.toast');
+        toasts.forEach(toast => {
+            setTimeout(() => {
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.hide();
+            }, 5000);
+        });
     });
-});
 </script>
 @endpush

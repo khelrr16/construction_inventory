@@ -1,7 +1,7 @@
 <div class="sidebar-header">
     <span class="menu-text">
-        <h2><i class="fa solid fa-truck sidebar-logo"></i></h2>
-        <h3>CONSTRUCKTOR</h3>
+        <img src="{{ asset('img/logo/full-logo.png') }}" 
+            class="mx-auto d-block w-75" alt="img-logo">
     </span>
 </div>
 
@@ -28,13 +28,6 @@
                 class="{{ request()->routeIs('driver.deliveries') ? 'active' : '' }}">
                 <i class="bi bi-boxes"></i>
                 <span class="menu-text">Deliveries</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('driver.vehicles') }}" 
-                class="{{ request()->routeIs('driver.vehicles') ? 'active' : '' }}">
-                <i class="bi bi-truck-front"></i>
-                <span class="menu-text">Vehicles</span>
             </a>
         </li>
     </ul>

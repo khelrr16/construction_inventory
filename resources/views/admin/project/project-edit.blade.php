@@ -32,27 +32,62 @@
         @endif
     </div>
     
-    <div class="container mt-5">
+    <div class="container mt-5 fs-5">
         <!-- Project Info Card -->
         <div class="card shadow-sm mb-4">
-            <div class="card-header d-flex justify-content-between align-items-start">
-                <h2 class="card-title mb-0 fw-bold">
-                    <a href="{{ route('admin.projects') }}"
-                        class="text-decoration-none">
-                        <i class="bi bi-arrow-left"></i>
-                    </a>
-                    {{ $project->project_name }}
-                </h2>
-                
-                <div class="text-end">
-                    <span class="badge bg-primary mt-2 fs-5">{{ ucwords($project->status) }}</span>
-                </div>
-            </div>
+            <form action="{{ route('admin.project.update',$project->id) }}"
+                method="POST">
+                @csrf @method('PUT')
 
-            <div class="card-body">
-                <div class="row">
-                    <form id="projectForm" action="" method="POST">
-                        @csrf @method('PUT')
+                <div class="card-header d-flex justify-content-between align-items-start">
+                    <h2 class="card-title mb-0 fw-bold">
+                        <a href="{{ route('admin.projects') }}"
+                            class="text-decoration-none">
+                            <i class="bi bi-arrow-left"></i>
+                        </a>
+                        {{ $project->project_name }}
+                    </h2>
+                    
+                    <div class="text-end">
+                        <select class="form-select fs-5"
+                            name="status">
+                            
+                            <option @if($project->status == 'draft') selected @endif
+                                class="fw-bold text-muted"
+                                value="draft">
+                                Draft
+                            </option>
+
+                            <option @if($project->status == 'active') selected @endif
+                                class="fw-bold text-primary"
+                                value="active">
+                                Active
+                            </option>
+
+                            <option @if($project->status == 'postponed') selected @endif
+                                class="fw-bold text-warning"
+                                value="postponed">
+                                Postponed
+                            </option>
+
+                            <option @if($project->status == 'discontinued') selected @endif
+                                class="fw-bold text-danger"
+                                value="discontinued">
+                                Discontinued
+                            </option>
+
+                            <option @if($project->status == 'completed') selected @endif
+                                class="fw-bold text-success"
+                                value="completed">
+                                Sir, tapos na po.
+                            </option>
+                            
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
                         <div class="col-12 mt-3">
                             <label for="description" class="form-label fw-bold">Description</label>
                             <textarea name="description" id="description" class="form-control" rows="3"
@@ -61,7 +96,7 @@
 
                         <div class="mt-3">
                             <label for="worker" class="form-label fw-bold">Assign</label>
-                            <select name="worker_id" id="worker" class="form-control" required>
+                            <select name="worker_id" id="worker" class="form-control text-mute" required>
                                 <option selected disabled>--Site Worker--</option>
                                 @if($workers)
                                     @foreach($workers as $worker)
@@ -104,21 +139,13 @@
                         <!-- Buttons -->
                         <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 p-3">
                             <!-- Save Button -->
-                            <button type="submit" id="btnSave" class="btn btn-primary w-100 w-sm-auto"
-                                formaction="{{ route('admin.project.update',['project_id' => $project->id, 'submit' => 'false',]) }}">
+                            <button type="submit" id="btnSave" class="btn btn-primary w-100 w-sm-auto">
                                 Save
                             </button>
-                            @if($project->status == 'draft')
-                                <!-- Request Button -->
-                                <button type="submit" id="btnRequest" class="btn btn-success w-100 w-sm-auto"
-                                    formaction="{{ route('admin.project.update', ['project_id' => $project->id, 'submit' => 'true']) }}">
-                                    Request
-                                </button>
-                            @endif
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 @endsection

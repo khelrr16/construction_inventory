@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('model');
             $table->string('plate_number')->unique();
             $table->foreignId('registered_by')->constrained('users')->onDelete('cascade');
+            $table->string('status');
             $table->timestamps();
             $table->softDeletes();
         });

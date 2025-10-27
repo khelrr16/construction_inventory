@@ -67,35 +67,8 @@
 
             <div id="resource" class="collapse">
                 <div class="card-body">
-                    {{-- Project Overview --}}
-                    <h4 class="fw-bold text-primary">
-                        <i class="bi bi-box-seam"></i> Project Overview
-                    </h4>
-                    <p class="mb-5 text-muted">{{ $resource->project->description ?? 'No description provided' }}</p>
-
-                    {{-- Location --}}
-                    <h4 class="fw-bold text-primary">
-                        <i class="bi bi-geo-alt"></i> Location
-                    </h4>
-                    <p class="mb-1">{{ ($resource->project->house . ', ' . $resource->project->zipcode) ?? 'N/A' }}</p>
-                    <p class="mb-5">{{ ($resource->project->province . ', ' . $resource->project->city . ', ' . $resource->project->barangay) ?? 'N/A' }}</p>
-
-                    {{-- Project Owner --}}
-                    <h4 class="fw-bold text-primary">
-                        <i class="bi bi-person"></i> Project Owner
-                    </h4>
-                    <p class="mb-1"><strong>Name:</strong> {{ $resource->project->owner->name ?? 'N/A' }}</p>
-                    <p class="mb-1"><strong>Phone:</strong> {{ $resource->project->owner->contact_number ?? 'N/A' }}</p>
-                    <p class="mb-5"><strong>Email:</strong> {{ $resource->project->owner->email ?? 'N/A' }}</p>
-
-                    {{-- Assigned --}}
-                    <h4 class="fw-bold text-primary">
-                        <i class="bi bi-check2-circle"></i> Assigned
-                    </h4>
-                    <p class="mb-1"><strong>Worker:</strong> {{ $resource->project->worker->name ?? 'N/A' }}</p>
-                    <p class="mb-1"><strong>ID:</strong> {{ $resource->project->worker->employeeCode() ?? 'N/A' }}</p>
-
-                    <hr class="mt-5">
+                    @php $project = $resource->project @endphp
+                    @include('parts.details.project-details')
                 </div>
             </div>
 
@@ -104,21 +77,38 @@
                 <form action="{{route('worker.resource.verify.complete', $resource->id)}}" method="POST">
                     @csrf @method('PUT')
                     <!-- Resources Table -->
-                    <div class="card shadow-sm" id="resourcesTable">
-                        <div
-                            class="card-header d-flex justify-content-between align-items-center bg-secondary text-white">
-                            <h5 class="mb-0"
-                                style="cursor:pointer;"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#resourceDetailsModal">
-                                Resource <i class="bi bi-info-circle"></i>
-                            </h5>
+                        <div class="card shadow-sm mt-4">
+                            <div class="card-header d-flex justify-content-between align-items-center bg-primary">
+                                <h5 class="mb-0 text-white"
+                                    style="cursor:pointer;"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#resourceDetailsModal">
+                                    Resource <i class="bi bi-info-circle"></i>
+                                </h5>
+
+                            <!-- Details Modal -->
+                            <div class="modal fade" id="resourceDetailsModal" tabindex="-1" aria-labelledby="resourceDetailsModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="resourceDetailsModal">
+                                                Resource Details
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            @include('parts.details.resource-details')
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Display Table -->
-                        <div class="table-responsive">
-                            <table class="table table-hover table-striped align-middle text-center mb-0 fw-bold">
-                                <thead class="table-dark text-white">
+                        <div class="table-responsive p-3">
+                            <table class="table table-hover table-striped align-middle text-center mb-0" id="verifyTable">
+                                <thead class="table-dark">
                                     <tr>
                                         <th class="col-1">No.</th>
                                         <th class="col-2">Name</th>
@@ -184,11 +174,12 @@
                                                     name="broken[{{$item->id}}]"
                                                     data-success-threshold="{{$item->quantity}}"
                                                     value="{{ old( 'broken.'.$item->id) }}"
-
                                                 >
                                             </td>
                                             <!-- Status -->
-                                            <td>{{ $item->status }}</td>
+                                            <td>
+                                                <x-status-badge status="{{ $item->status }}" class="fs-5" />
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -216,85 +207,20 @@
                     </button>
                 </form>
             </div>
-
-            <!-- Details Modal -->
-            <div class="modal fade" id="resourceDetailsModal" tabindex="-1" aria-labelledby="resourceDetailsModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="resourceDetailsModal">
-                                Resource Details
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <!-- Created at -->
-                            <div class="mb-3">
-                                <h5 class="fw-bold">Created at:</h5>
-                                {{ $resource->created_at->format('m/d/Y')}}
-                            </div>
-
-                            <!-- Created by -->
-                            <div class="mb-3">
-                                <h5 class="fw-bold">Created by:</h5>
-                                {{ $resource->creator->name }} 
-                                <br> {{ $resource->creator->employeeCode() }}
-                            </div>
-
-                            <!-- Warehouse -->
-                            <div class="mb-3">
-                                <h5 class="fw-bold">Warehouse:</h5>
-                                @if($resource->warehouse)
-                                    {{ $resource->warehouse->name }} 
-                                    <br> {{ $resource->warehouse->house
-                                    .', '.$resource->warehouse->zipcode }}
-                                    <br> {{ $resource->warehouse->barangay
-                                    .', '.$resource->warehouse->city
-                                    .', '.$resource->warehouse->province }}
-                                @else
-                                    N/A
-                                @endif
-                            </div>
-
-                            <!-- Approved By: -->
-                            <div class="mb-3">
-                                <h5 class="fw-bold">Approved By:</h5>
-                                @if($resource->approver)
-                                    {{ $resource->approver->name }} 
-                                    <br> {{ $resource->approver->employeeCode() }}
-                                @else
-                                    N/A
-                                @endif
-                            </div>
-
-                            <!-- Prepared By: -->
-                            <div class="mb-3">
-                                <h5 class="fw-bold">Prepared By:</h5>
-                                @if($resource->preparer)
-                                    {{ $resource->preparer->name }} 
-                                    <br> {{ $resource->preparer->employeeCode() }}
-                                @else
-                                    N/A
-                                @endif
-                            </div>
-
-                            <!-- Driver: -->
-                            <div class="mb-3">
-                                <h5 class="fw-bold">Delivered By:</h5>
-                                @if($resource->driver)
-                                    {{ $resource->driver->name }} 
-                                    <br> {{ $resource->driver->employeeCode() }}
-                                @else
-                                    N/A
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
+@endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#verifyTable').DataTable({
+                searching: false, // Disables the search input
+                paging: false,    // Disables pagination
+                info: false       // Optionally, hides the "Showing X of Y entries" info
+            });
+        });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -340,4 +266,4 @@
             });
         });
     </script>
-@endsection
+@endpush

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class VehicleController extends Controller
 {
-    public function driver_add(Request $request){
+    public function admin_add(Request $request){
         $request->validate([
             'type' => 'required',
             'brand' => 'required',
@@ -23,24 +23,27 @@ class VehicleController extends Controller
             'model' => $request->model,
             'plate_number' => $request->plate_number,
             'registered_by' => auth()->guard()->id(),
+            'status' => 'inactive',
         ]);
 
         return back()->with('success', 'Vehicle was added.');
     }
 
-    public function driver_edit(Request $request, $vehicle_id){
-        $vehicle = Vehicle::findOrFail($vehicle_id);
+    public function admin_edit(Request $request, $vehicle_id){
 
+        $vehicle = Vehicle::findOrFail($vehicle_id);
         $request->validate([
             'type' => 'required',
             'brand' => 'required',
             'color' => 'required',
             'model' => 'required',
             'plate_number' => 'required|unique:vehicles,plate_number,'.$vehicle->id,
+            'status' => 'required',
         ]);
 
+        $vehicle->update($request->all());
         return redirect()
-            ->route('driver.vehicles')
-            ->with('success', 'Vehicle details edited.');
+            ->route('admin.vehicles')
+            ->with('success', 'Vehicle details updated.');
     }
 }

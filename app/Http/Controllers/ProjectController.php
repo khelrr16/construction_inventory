@@ -29,7 +29,7 @@ class ProjectController extends Controller
         return back()->with('success', 'Project added successfully!');
     }
 
-    public function update(Request $request, $id, $submit){
+    public function update(Request $request, $project_id){
         $request->validate([
             'worker_id' => 'required|exists:users,id',
             'description' => 'required|string|max:255',
@@ -38,19 +38,13 @@ class ProjectController extends Controller
             'city' => 'required|max:255',
             'province' => 'required|max:255',
             'zipcode' => 'integer|required|max:10000',
+            'status' => 'required',
         ]);
 
-        $project = Projects::findOrFail($id);
+        $project = Projects::findOrFail($project_id);
         $project->update($request->all());
         
-        if($submit === 'true'){
-            $project->update(['status' => 'processing']);
-            return redirect()->route('admin.projects')->with('success', $project->project_name.' started processing!');
-        }
-        // if($project->items->isEmpty()){
-        //     return back()->withErrors(['failed' => 'Empty resources.']);
-        // }
-        return back()->with('success', $project->project_name.' has been saved!');
+        return redirect()->route('admin.projects')->with('success', 'Project has been updated!');
     }
 
     public function save(Request $request, $id){

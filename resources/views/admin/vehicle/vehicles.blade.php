@@ -1,4 +1,4 @@
-@extends('layouts.driver.layout')
+@extends('layouts.admin.layout')
 
 @section('title', 'Title')
 
@@ -32,7 +32,7 @@
         @endif
     </div>
     
-    <div class="card shadow-sm">
+    <div class="card shadow-sm fs-5">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="mb-0"><i class="bi bi-truck-front"></i> Vehicle List</h4>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVehicleModal">
@@ -49,13 +49,19 @@
                                 aria-label="Close"></button>
                         </div>
 
-                        <form action="{{ route('driver.vehicle.add') }}" method="POST">
+                        <form action="{{ route('admin.vehicle.add') }}" method="POST">
                             @csrf
                             <div class="modal-body">
                                 <!-- Type -->
                                 <div class="mb-3">
                                     <label for="type" class="form-label fw-bold">Type</label>
-                                    <input type="text" class="form-control" id="type" name="type" required>
+                                    <select class="form-select" name="type" id="type">
+                                        <option value="truck">Truck</option>
+                                        <option value="car">Car</option>
+                                        <option value="motorcycle">Motorcycle</option>
+                                        <option value="e-bike">E-bike</option>
+                                        <option value="others">Others</option>
+                                    </select>
                                 </div>
 
                                 <!-- Brand -->
@@ -92,22 +98,26 @@
                 </div>
             </div>
         </div>
+        
         <div class="list-group list-group-flush">
             @forelse($vehicles as $index => $vehicle)
                 <div class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="me-2">
-                        <h4 class="mb-1 fw-bold">{{ $vehicle->type }}</h4>
-                        <medium class="text-muted">Brand: {{ $vehicle->brand }}</medium><br>
-                        <medium class="text-muted">Color: {{ $vehicle->color }}</medium><br>
-                        <medium class="text-muted">Model: {{ $vehicle->model }}</medium><br>
-                        <medium class="text-muted">Plate Number: {{ $vehicle->plate_number }}</medium><br>
-                        <medium class="text-muted">Created: {{ $vehicle->created_at->format('Y-m-d') }}</medium>
+                        <h4 class="mb-1 fw-bold">{{ ucwords($vehicle->type) }}</h4>
+                        <medium class="text-muted">Brand: {{ ucwords($vehicle->brand) }}</medium><br>
+                        <medium class="text-muted">Color: {{ ucwords($vehicle->color) }}</medium><br>
+                        <medium class="text-muted">Model: {{ ucwords($vehicle->model) }}</medium><br>
+                        <medium class="text-muted">Plate Number: {{ ucwords($vehicle->plate_number) }}</medium><br>
+                        <medium class="text-muted">Created: {{ $vehicle->created_at->format('F m, Y') }}</medium>
                     </div>
                     
-                    <div class="d-flex align-items-center gap-2">                        
-                        <a href="{{ route('driver.vehicle.edit', $vehicle->id) }}" class="btn btn-light btn-lg border">
-                            <i class="bi bi-gear"></i>
-                        </a>
+                    <div class="d-flex align-items-center gap-2">
+                        <x-status-badge status="{{ $vehicle->status }}" class="fs-5" />
+                        @if($vehicle->status !== 'occupied')
+                            <a href="{{ route('admin.vehicle.edit.view', $vehicle->id) }}" class="btn btn-light btn-lg border">
+                                <i class="bi bi-gear"></i>
+                            </a>
+                        @endif
                     </div>
                 </div>
             @empty

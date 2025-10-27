@@ -64,6 +64,12 @@ Route::middleware(['auth', 'can:access-admin'])->group(function(){
     Route::get('/admin/user-management/', [RedirectController::class, 'admin_user_management'])
         ->name('admin.user-management');
 
+    Route::get('/admin/vehicles/', [RedirectController::class, 'admin_vehicles'])
+        ->name('admin.vehicles');
+    
+    Route::get('/admin/vehicle/edit/{vehicle_id}', [RedirectController::class, 'admin_vehicle_edit'])
+        ->name('admin.vehicle.edit.view');
+
     Route::get('/admin/projects/', [RedirectController::class, 'admin_projects'])
         ->name('admin.projects');
 
@@ -78,17 +84,21 @@ Route::middleware(['auth', 'can:access-admin'])->group(function(){
     
     Route::get('/admin/warehouses/{warehouse_id}', [RedirectController::class, 'admin_warehouse_view'])
         ->name('admin.warehouse.view');
+    
+    Route::get('/admin/warehouses/edit/{warehouse_id}', [RedirectController::class, 'admin_warehouse_edit'])
+        ->name('admin.warehouse.edit');
+
+     // Project
+    Route::post('/admin/project/new', [ProjectController::class, 'new'])
+        ->name('admin.project.new');
+    Route::put('/admin/project/update/{project_id}', [ProjectController::class, 'update'])
+        ->name('admin.project.update');
 
     // ---- Warehouse
-    Route::post('/admin/warehouses/new', [WarehouseController::class, 'warehouse_new'])
+    Route::post('/admin/warehouses/new', [WarehouseController::class, 'admin_new'])
         ->name('admin.warehouse.new');
-
-    // ---- Requests
-    Route::get('/admin/requests/new-resources', [RedirectController::class, 'requests_new_resources'])
-        ->name('admin.requests.new-resources');
-
-    Route::put('/admin/requests/new-resources/update/{resource_id}/{value}', [ResourceController::class, 'request_update_resource'])
-        ->name('admin.requests.resources.update');
+    Route::put('/admin/warehouse/update/{warehouse_id}', [WarehouseController::class, 'admin_update'])
+        ->name('admin.warehouse.update');
     
     // User Changes
     Route::put('/admin/users/role/role/{user_id}', [UserController::class, 'admin_updateRole'])
@@ -101,9 +111,24 @@ Route::middleware(['auth', 'can:access-admin'])->group(function(){
     Route::delete('/admin/users/delete/{user_id}', [UserController::class, 'admin_destroy'])
         ->name('admin.user.destroy');
 
-     // Project
-    Route::post('/admin/project/new', [ProjectController::class, 'new'])->name('admin.project.new');
-    Route::put('/admin/project/{project_id}/update/{submit}', [ProjectController::class, 'update'])->name('admin.project.update');
+    //Vehicles
+    Route::put('/admin/project/delivery/{resource_id}/{action}', [ResourceController::class, 'resource_delivery_update'])
+        ->name('admin.delivery.update');
+
+    Route::post('/admin/vehicle/add/', [VehicleController::class, 'admin_add'])
+        ->name('admin.vehicle.add');
+    
+    Route::put('/admin/vehicle/edit/{vehicle_id}', [VehicleController::class, 'admin_edit'])
+        ->name('admin.vehicle.edit.complete');
+    
+
+    // ---- Requests
+    Route::get('/admin/requests/new-resources', [RedirectController::class, 'requests_new_resources'])
+        ->name('admin.requests.new-resources');
+
+    Route::put('/admin/requests/new-resources/update/{resource_id}/{value}', [ResourceController::class, 'request_update_resource'])
+        ->name('admin.requests.resources.update');
+    
 });
 
 // WORKER
@@ -133,7 +158,7 @@ Route::middleware(['auth', 'can:access-worker'])->group(function(){
     Route::put('/worker/project/resource/verify/{resource_id}', [ResourceController::class, 'resource_verify_complete'])
         ->name('worker.resource.verify.complete');
 
-    Route::post('/worker/project/resource_item/add/complete/{resource_id}', [ResourceController::class, 'item_add'])
+    Route::post('/worker/project/resource_item/add/{resource_id}', [ResourceController::class, 'item_add'])
         ->name('worker.resource_item.add.complete');
     Route::put('/worker/project/resource_item/update/{resource_id}', [ResourceController::class, 'item_update'])
         ->name('worker.resource_item.update');
@@ -150,8 +175,11 @@ Route::middleware(['auth', 'can:access-inventory-clerk'])->group(function(){
     Route::get('/clerk/requests/', [RedirectController::class, 'clerk_requests'])
         ->name('clerk.requests');
 
-    Route::get('/clerk/preparation/{resource_id}', [RedirectController::class, 'clerk_preparation'])
+    Route::get('/clerk/preparation/', [RedirectController::class, 'clerk_preparation'])
         ->name('clerk.preparation');
+
+    Route::get('/clerk/preparation/{resource_id}', [RedirectController::class, 'clerk_preparation_view'])
+        ->name('clerk.preparation.view');
     
     Route::get('/clerk/inventory/{warehouse_id}', [RedirectController::class, 'clerk_inventory'])
         ->name('clerk.inventory');
@@ -160,9 +188,9 @@ Route::middleware(['auth', 'can:access-inventory-clerk'])->group(function(){
         ->name('clerk.inventory.item.edit');
 
     // Action
-    Route::get('/clerk/resource/prepare/{resource_id}', [ResourceController::class, 'resource_prepare'])
+    Route::put('/clerk/resource/prepare/{resource_id}', [ResourceController::class, 'resource_prepare'])
         ->name('clerk.resource.prepare');
-
+    
     Route::post('/clerk/preparation/prepare/{resource_id}', [ResourceController::class, 'resource_prepare_complete'])
         ->name('clerk.resource.prepare.complete');
 
@@ -191,19 +219,9 @@ Route::middleware(['auth', 'can:access-driver'])->group(function(){
     Route::get('/driver/deliveries/', [RedirectController::class, 'driver_deliveries'])
         ->name('driver.deliveries');
 
-    Route::get('/driver/vehicles/', [RedirectController::class, 'driver_vehicles'])
-        ->name('driver.vehicles');
-    
-    Route::get('/driver/vehicle/edit/{vehicle_id}', [RedirectController::class, 'driver_vehicle_edit'])
-        ->name('driver.vehicle.edit');
-
     //Action
-    Route::put('/driver/project/delivery/{resource_id}/{action}', [ResourceController::class, 'resource_delivery_update'])
-        ->name('driver.delivery.update');
-
-    Route::post('/driver/vehicle/add/', [VehicleController::class, 'driver_add'])
-        ->name('driver.vehicle.add');
-    
-    Route::put('/driver/vehicle/edit/{vehicle_id}', [VehicleController::class, 'driver_edit'])
-        ->name('driver.vehicle.edit');
+    Route::put('/driver/delivery/update/start/{resource_id}', [ResourceController::class, 'resource_delivery_start'])
+        ->name('driver.delivery.start');
+    Route::put('/driver/delivery/update/complete/{resource_id}', [ResourceController::class, 'resource_delivery_complete'])
+        ->name('driver.delivery.complete');
 });

@@ -193,7 +193,7 @@
 
                     <!-- Display Resources Table / Buttons  -->
                     <div class="table-responsive">  
-                        <table class="table table-hover table-striped align-middle text-center mb-0">
+                        <table @if($items->isNotEmpty()) id="resourceTable" @endif class="table table-hover table-striped align-middle text-center mb-0">
                             <thead class="table-dark text-white">
                                 <tr>
                                     <th class="col-1">No.</th>
@@ -377,7 +377,9 @@
             </div>
         </div>
     </div>
+@endsection
 
+@push('scripts')
     <script>
         function toggleSelect(row) {
             const checkbox = row.querySelector('input[type=checkbox]');
@@ -412,4 +414,4 @@
         });
 
     </script>
-@endsection
+@endpush

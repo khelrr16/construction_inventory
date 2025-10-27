@@ -54,12 +54,19 @@
                             <p class="mb-1">
                                 {{ ($warehouse->barangay . ', ' . $warehouse->city . ', ' . $warehouse->province) ?? 'N/A' }}
                             </p>
+                            <p class="mb-1">
+                                {{ count($warehouse->items) }} items registered
+                            </p>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <span class="badge bg-primary">{{ ucwords($warehouse->status) }}</span>
                             <!-- Project status badges -->
-                            <a href="{{ route('admin.warehouse.view', $warehouse->id) }}" class="btn btn-light btn-lg border">
+                            <a href="{{ route('admin.warehouse.edit', $warehouse->id) }}" class="btn btn-light btn-lg border">
                                 <i class="bi bi-gear"></i>
+                            </a>
+
+                            <a href="{{ route('admin.warehouse.view', $warehouse->id) }}" class="btn btn-light btn-lg border">
+                                <i class="bi bi-arrow-right-short"></i>
                             </a>
                         </div>
                     </div>

@@ -44,22 +44,13 @@
                         <div class="me-2">
                             <h4 class="mb-1 fw-bold">{{ $project->project_name }}</h4>
                             <medium class="text-muted">{{ $project->description }}</medium><br>
-                            <medium class="text-muted">Created: {{ $project->created_at->format('Y-m-d') }}</medium>
+                            <medium class="text-muted">Resources: {{ count($project->resources) }}</medium><br>
+                            <medium class="text-muted">Created: {{ $project->created_at->format('F j, Y') }}</medium>
                         </div>
                         
                         <div class="d-flex align-items-center gap-2">
                             <!-- Project status badges -->
-                            <span class="badge
-                            @switch($project->status)
-                                @case('processing')
-                                    bg-warning @break
-                                @case('completed')
-                                    bg-success @break
-                                @case('cancelled') @case('incomplete')
-                                    bg-danger @break
-                                @default
-                                    bg-secondary @break
-                            @endswitch fs-5">{{ ucfirst($project->status) }}</span>
+                            <x-status-badge status="{{ $project->status }}" class="fs-5" />
 
                             <a href="{{ route('worker.project.view', $project->id) }}" class="btn btn-light btn-lg border">
                                 <i class="bi bi-gear"></i>

@@ -1,4 +1,4 @@
-@extends('layouts.driver.layout')
+@extends('layouts.admin.layout')
 
 @section('title', 'Title')
 
@@ -33,18 +33,49 @@
     </div>
     
     <div class="card shadow-sm">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h4 class="mb-0"><i class="bi bi-truck-front"></i> Vehicle List</h4>
-        </div>
-        <div class="card-body">
-            <form action="{{ route('driver.vehicle.edit', $vehicle->id) }}" method="POST">
-                @csrf @method('PUT')
+        <form action="{{ route('admin.vehicle.edit.complete', $vehicle->id) }}" method="POST">
+            @csrf @method('PUT')
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0 fw-bold">
+                    <a href="{{ route('admin.vehicles') }}"
+                        class="text-decoration-none">
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+                    Vehicle Edit
+                </h4>
+
+                <div class="text-end">
+                    <select class="form-select fs-5" name="status">
+                        <option @if($vehicle->status == 'inactive') selected @endif
+                            value="inactive">
+                            Inactive
+                        </option>
+                        
+                        <option @if($vehicle->status == 'active') selected @endif
+                            value="active">
+                            Active
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
                 <div class="modal-body">
                     <!-- Type -->
                     <div class="mb-3">
                         <label for="type" class="form-label fw-bold">Type</label>
-                        <input type="text" value="{{ $vehicle->type }}"
-                            class="form-control" id="type" name="type" required>
+                        <select class="form-select" name="type" id="type">
+                            <option @if($vehicle->type == 'truck') selected @endif
+                                value="truck">Truck</option>
+                            <option @if($vehicle->type == 'car') selected @endif
+                                value="car">Car</option>
+                            <option @if($vehicle->type == 'motorcycle') selected @endif
+                                value="motorcycle">Motorcycle</option>
+                            <option @if($vehicle->type == 'e-bike') selected @endif
+                                value="e-bike">E-bike</option>
+                            <option @if($vehicle->type == 'others') selected @endif
+                                value="others">Others</option>
+                        </select>
                     </div>
 
                     <!-- Brand -->
@@ -83,7 +114,8 @@
                         <i class="bi bi-check-circle"></i> Save Vehicle
                     </button>
                 </div>
-            </form>
-        </div>
+                
+            </div>
+        </form>
     </div>
 @endsection

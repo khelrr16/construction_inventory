@@ -72,40 +72,13 @@
                 {{-- Body --}}
                 <div id="resource-{{ $index }}" class="collapse">
                     <div class="card-body">
-                        {{-- Project Overview --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-box-seam"></i> Project Overview
-                        </h4>
-                        <p class="mb-5 text-muted">{{ $resource->project->description ?? 'No description provided' }}</p>
-
-                        {{-- Location --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-geo-alt"></i> Location
-                        </h4>
-                        <p class="mb-1">{{ ($resource->project->house . ', ' . $resource->project->zipcode) ?? 'N/A' }}</p>
-                        <p class="mb-5">{{ ($resource->project->province . ', ' . $resource->project->city . ', ' . $resource->project->barangay) ?? 'N/A' }}</p>
-
-                        {{-- Project Owner --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-person"></i> Project Owner
-                        </h4>
-                        <p class="mb-1"><strong>Name:</strong> {{ $resource->project->owner->name ?? 'N/A' }}</p>
-                        <p class="mb-1"><strong>Phone:</strong> {{ $resource->project->owner->contact_number ?? 'N/A' }}</p>
-                        <p class="mb-5"><strong>Email:</strong> {{ $resource->project->owner->email ?? 'N/A' }}</p>
-
-                        {{-- Assigned --}}
-                        <h4 class="fw-bold text-primary">
-                            <i class="bi bi-check2-circle"></i> Assigned
-                        </h4>
-                        <p class="mb-1"><strong>Worker:</strong> {{ $resource->project->worker->name ?? 'N/A' }}</p>
-                        <p class="mb-1"><strong>ID:</strong> {{ $resource->project->worker->employeeCode() ?? 'N/A' }}</p>
-
-                        <hr class="mt-5">
+                        @php $project= $resource->project @endphp
+                        @include('parts.details.project-details')
 
                         <div class="card-body p-0">
                             <!-- Resources Table -->
-                            <div class="card shadow-sm mt-4" id="resourcesTable">
-                                <div class="card-header d-flex justify-content-between align-items-center bg-secondary">
+                            <div class="card shadow-sm mt-4">
+                                <div class="card-header d-flex justify-content-between align-items-center bg-primary">
                                     <!-- Button trigger modal -->
                                     <h5 class="mb-0 text-white"
                                         style="cursor:pointer;"
@@ -187,60 +160,11 @@
                                 </div>
                                 
                                 <!-- Display Table -->
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped align-middle text-center mb-0">
-                                        <thead class="table-dark text-white">
-                                            <tr>
-                                                <th class="col-1">No.</th>
-                                                <th class="col-2">Name</th>
-                                                <th class="col-4">Description</th>
-                                                <th class="col-1">Quantity</th>
-                                                <th class="col-1">Cost</th>
-                                                <th class="col-1">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($resource->items as $item_index => $item)
-                                                <tr>
-                                                    <td>{{ $item_index + 1 }}</td>
-                                                    <td class="text-start">
-                                                        @if($item->details->category === 'material')
-                                                            <i class="bi bi-box"></i>
-                                                        @else
-                                                            <i class="bi bi-wrench"></i>
-                                                        @endif
-                                                        {{ $item->details->name }}
-                                                    </td>
-                                                    <td class="text-start">{{ $item->details->description }}</td>
-                                                    <td>
-                                                        {{ $item->quantity . ' ' . $item->details->measure}}
-                                                    </td>
-                                                    <td class="text-end pe-3">
-                                                        ₱{{ number_format($item->details->cost * $item->quantity, 2) }}</td>
-                                                    <td>{{ $item->status }}</td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="5" class="text-center text-muted">No resources added yet</td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                        @if($resource->items->isNotEmpty())
-                                            <tfoot class="table-light fw-bold">
-                                                <tr>
-                                                    <td colspan="3"></td>
-                                                    <td>Total:</td>
-                                                    <td class="text-end pe-3">₱{{ number_format($resource->items->sum(fn($item) => $item->details->cost * $item->quantity), 2) }}</td>
-                                                    <td></td>
-                                                </tr>
-                                            </tfoot>
-                                        @endif
-                                    </table>
-                                </div>
+                                @include('parts.tables.table-1')
                             </div>
 
                             <!-- Complete Button -->
-                            <form action="{{ route('driver.delivery.update', ['resource_id' => $resource->id, 'action' => 'complete'])}}"
+                            <form action="{{ route('driver.delivery.complete',  $resource->id)}}"
                                 method="POST">
                                 @csrf @method('PUT')
 
@@ -253,7 +177,7 @@
                 </div>
             </div>
         @empty
-            <h1 class="text-center">No pending delivery.</h1>
+            <h1 class="text-center">No current delivery.</h1>
         @endforelse
     
     </div>

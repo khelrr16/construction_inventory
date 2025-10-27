@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Vehicle;
 use App\Models\Projects;
 use Illuminate\Http\Request;
 use App\Models\ResourceStatus;
@@ -41,7 +42,9 @@ class ResourceController extends Controller
                     ->with('active_tab', $resource_id)
                     ->withFragment('resourceTabsContent');
             }
+
             $resource->update(['status' => 'pending']);
+            
             foreach($resource_items as $item){
                 $item->update(['status' => 'pending']);
             }
@@ -145,41 +148,40 @@ class ResourceController extends Controller
             ResourceStatus::create([
                 'project_id' => $resource->project_id,
                 'resource_id' => $resource_id,
-                'status' => 'declined',
-                'description' => '',
+                'status' => 'Declined',
+                'description' => 'Resource request was declined for whatever reason.',
             ]);
 
             return back()->with('success', 'Resource request declined.');
         }
     }
     public function resource_prepare($resource_id){
-        $resource = ProjectResource::findOrFail($resource_id);
-        if($resource->status == 'to be packed'){
-            $resource_items = ProjectResourceItem::where('resource_id', $resource_id)->get();
-            $resource->update([
-                'prepared_by' => Auth::id(),
-                'status' => 'packing',
-            ]);
 
-            foreach($resource_items as $item){
-                $item->status = 'packing';
-                $item->save();
-            }
-            ResourceStatus::create([
-                'project_id' => $resource->project_id,
-                'resource_id' => $resource_id,
-                'status' => 'Packing',
-                'description' => 'Items are getting prepared.',
-            ]);
+        $resource = ProjectResource::findOrFail($resource_id);
+        $resource_items = ProjectResourceItem::where('resource_id', $resource_id)->get();
+        $resource->update([
+            'prepared_by' => Auth::id(),
+            'status' => 'packing',
+        ]);
+
+        foreach($resource_items as $item){
+            $item->status = 'packing';
+            $item->save();
         }
+        ResourceStatus::create([
+            'project_id' => $resource->project_id,
+            'resource_id' => $resource_id,
+            'status' => 'Packing',
+            'description' => 'Items are getting prepared.',
+        ]);
         
-        return redirect()->route('clerk.preparation', $resource_id);
+        return back()->with('success', 'Resource sent to preparations.');
     }
 
     public function resource_prepare_complete(Request $request, $resource_id){
 
         $resource = ProjectResource::findOrFail($resource_id);
-
+        
         foreach($request->supplied as $index => $supplied){
             $resource_item = ProjectResourceItem::findOrFail($index);
             $resource_item->update(['supplied' => $supplied]);
@@ -192,6 +194,7 @@ class ResourceController extends Controller
                 return back()->withErrors('Insufficient stocks.');
             }
         }
+
         $request->validate(['driver_id' => 'required']);
         $resource->driver_id = $request->driver_id;
         $resource->save();
@@ -228,41 +231,52 @@ class ResourceController extends Controller
         return redirect()->route('clerk.requests')->with('success', value: 'Resource is ready for delivery!');
     }
 
-    public function resource_delivery_update(Request $request, $resource_id, $action){        
+    public function resource_delivery_start(Request $request, $resource_id){
         $resource = ProjectResource::findOrFail($resource_id);
         $resource_items = ProjectResourceItem::where('resource_id', $resource_id)->get();
-        $itemresource_status = null;
-        $status = null;
-        $description = null;
-
-        if($action === 'start'){
-            $request->validate([
-                'vehicle_id' => 'required',
-            ]);
-            $itemresource_status = 'on delivery';
-            $status = 'On Delivery';
-            $description = 'Resource is being delivered.';
-        } elseif($action === 'complete'){
-            $itemresource_status = 'Delivered';
-            $status = 'Delivered';
-            $description = 'Resource is received.';
+        $vehicle = Vehicle::findOrFail($request->vehicle_id);
+        if($vehicle->status == 'occupied'){
+            return back()->withError(['Vehicle is already occupied.']);
         }
 
-        $resource->update(['status' => $itemresource_status]);
+        $resource->update(['status' => 'on delivery']);
         foreach($resource_items as $index => $item){
-            $item->update(['status' => $itemresource_status]);
+            $item->update(['status' => 'on delivery']);
+        }
+        $vehicle->status = 'occupied';
+        $vehicle->save();
+
+        ResourceStatus::create([
+            'project_id' => $resource->project_id,
+            'resource_id' => $resource_id,
+            'status' => 'On Delivery',
+            'description' => 'Resource is being delivered.',
+        ]);
+
+        return redirect()
+            ->route('driver.deliveries')
+            ->with('success', 'Resource is ready for delivery!');
+    }
+
+    public function resource_delivery_complete(Request $request, $resource_id){
+
+        $resource = ProjectResource::findOrFail($resource_id);
+        $resource_items = ProjectResourceItem::where('resource_id', $resource_id)->get();
+
+        $resource->update(['status' => 'delivered']);
+        foreach($resource_items as $index => $item){
+            $item->update(['status' => 'delivered']);
         }
 
         ResourceStatus::create([
             'project_id' => $resource->project_id,
             'resource_id' => $resource_id,
-            'status' => $status,
-            'description' => $description,
+            'status' => 'Delivered',
+            'description' => 'Resource is delivered. Ready for verification.',
         ]);
 
-        return $action == 'start'
-        ? back()->with('success', 'Resource is ready for delivery!')
-        : back()->with('success', 'Resource Delivery is updated.');
+        return back()
+            ->with('success', 'Resource is delivered succesfully!');
     }
 
     public function resource_verify_complete(Request $request, $resource_id){
@@ -272,13 +286,12 @@ class ResourceController extends Controller
         $brokenCount = 0;
 
         foreach ($request->completed as $index => $completed) {
+            $resource_item = ProjectResourceItem::findOrFail($index);
             $missing = $request->missing[$index] ?? 0;
             $broken = $request->broken[$index] ?? 0;
+            $missingCount += $missing;
+            $brokenCount += $broken;
 
-            $missingCount += $missing > 0;
-            $brokenCount += $broken > 0;
-
-            $resource_item = ProjectResourceItem::findOrFail($index);
             $expected = $resource_item->quantity;
 
             if (($completed + $missing + $broken) != $expected) {
@@ -288,9 +301,9 @@ class ResourceController extends Controller
             }
 
             if($completed == $expected){
-                $resource_item->status = 'Completed';
+                $resource_item->status = 'received';
             } else {
-                $resource_item->status = 'Incomplete';
+                $resource_item->status = 'incomplete';
                 $isIncomplete = true;
             }
 
@@ -301,7 +314,7 @@ class ResourceController extends Controller
         }
 
         $resource->update([
-            'status' => $isIncomplete ? 'Incomplete' : 'Received'
+            'status' => $isIncomplete ? 'incomplete' : 'received'
         ]);
 
         if($isIncomplete){
@@ -313,7 +326,7 @@ class ResourceController extends Controller
             ResourceStatus::create([
                 'project_id' => $resource->project_id,
                 'resource_id' => $resource->id,
-                'status' => 'Incomplete',
+                'status' => 'Received With Incompletion',
                 'description' => $descriptions 
                     ? implode(' and ', $descriptions) . '.' 
                     : 'Items incomplete',
@@ -322,7 +335,7 @@ class ResourceController extends Controller
             ResourceStatus::create([
                 'project_id' => $resource->project_id,
                 'resource_id' => $resource->id,
-                'status' => 'Completed',
+                'status' => 'Received',
                 'description' => 'Items are verified and received completely.',
             ]);
         }

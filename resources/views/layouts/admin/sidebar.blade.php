@@ -1,9 +1,9 @@
 <div class="sidebar-header">
     <span class="menu-text">
-        <h2><i class="fa solid fa-truck sidebar-logo"></i></h2>
-        <h3>CONSTRUCKTOR</h3>
+        <img src="{{ asset('img/logo/full-logo.png') }}" 
+            class="mx-auto d-block w-75" alt="img-logo">
     </span>
-    <small><span class="menu-text">Admin Panel</span></small>
+    <small><span class="menu-text fw-bold">Admin Panel</span></small>
 </div>
 
 <div class="sidebar-menu glass-scrollbar">
@@ -37,6 +37,13 @@
             </a>
         </li>
         <li>
+            <a href="{{ route('admin.vehicles') }}" 
+                class="{{ request()->routeIs('admin.vehicles') ? 'active' : '' }}">
+                <i class="bi bi-truck-front"></i>
+                <span class="menu-text">Vehicles</span>
+            </a>
+        </li>
+        <li>
             <a href="{{ route('admin.requests.new-resources') }}" 
                 class="{{ request()->routeIs('admin.requests.new-resources') ? 'active' : '' }}">
                 <i class="fas fa-tasks"></i>
@@ -66,24 +73,6 @@
                 <span class="menu-text">Driver</span>
             </a>
         </li>
-
-        <!-- Site Worker Collapsible Menu 
-        <li class="collapsible-menu">
-            <a href="javascript:void(0)" class="menu-toggle">
-                <i class="fas fa-clipboard-list"></i>
-                <span class="menu-text">Site Worker</span>
-                <i class="fas fa-chevron-down toggle-icon"></i>
-            </a>
-            <ul class="submenu">
-                <li>
-                    <a href="{{ route('worker.projects') }}" 
-                        class="{{ request()->routeIs('worker.projects') ? 'active' : '' }}">
-                        <i class="fas fa-boxes"></i>
-                        <span class="menu-text">Projects</span>
-                    </a>
-                </li>
-            </ul>
-        </li> -->
     </ul>
 </div>
 

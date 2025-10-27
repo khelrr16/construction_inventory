@@ -35,14 +35,14 @@
     <div class="container mt-5 fs-5">        
         <h3>Requested Resources For Packing</h3>
         <hr>
-        @forelse($resources as $r_index => $resource)
+        @forelse($resources as $index => $resource)
             <div class="card shadow-sm mb-4">
                 {{-- Header --}}
                 <div class="card-header d-flex justify-content-between align-items-start"
                     data-bs-toggle="collapse"
-                    data-bs-target="#resource-{{ $r_index}}" 
+                    data-bs-target="#resource-{{ $index}}" 
                     aria-expanded="false" 
-                    aria-controls="resource-{{ $r_index}}" 
+                    aria-controls="resource-{{ $index}}" 
                     style="cursor: pointer;">
                     
                     <div>
@@ -72,7 +72,7 @@
                 </div>
 
                 {{-- Body --}}
-                <div id="resource-{{ $r_index }}" class="collapse">
+                <div id="resource-{{ $index }}" class="collapse">
                     <div class="card-body">
                         {{-- Project Overview --}}
                         <h4 class="fw-bold text-primary">
@@ -106,145 +106,51 @@
 
                         <div class="card-body p-0">
                             <!-- Resources Table -->
-                            <div class="card shadow-sm mt-4" id="resourcesTable">
-                                <div class="card-header d-flex justify-content-between align-items-center bg-secondary text-white">
-                                    <!-- Button trigger modal -->
-                                    <h5 class="mb-0"
+                            <div class="card shadow-sm mt-4">
+                                <div class="card-header d-flex justify-content-between align-items-center bg-primary">
+                                    <h5 class="mb-0 text-white"
                                         style="cursor:pointer;"
                                         data-bs-toggle="modal" 
-                                        data-bs-target="#resourceDetailsModal{{ $r_index }}">
+                                        data-bs-target="#resourceDetailsModal{{ $index }}">
                                         Resource <i class="bi bi-info-circle"></i>
                                     </h5>
 
                                     <!-- Details Modal -->
-                                    <div class="modal fade" id="resourceDetailsModal{{ $r_index }}" tabindex="-1" aria-labelledby="resourceDetailsModalLabel{{ $r_index }}" aria-hidden="true">
+                                    <div class="modal fade" 
+                                        id="resourceDetailsModal{{ $index }}" 
+                                        tabindex="-1"
+                                        aria-labelledby="resourceDetailsModalLabel{{ $index }}" 
+                                        aria-hidden="true">
+                                        
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="resourceDetailsModal{{ $r_index }}">
-                                                        Resource Details
+                                                    <h5 class="modal-title" id="resourceDetailsModal{{ $index }}">
+                                                        View Details
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
 
                                                 <div class="modal-body">
-                                                    <!-- Created by -->
-                                                    <div class="mb-3">
-                                                        <h5 class="fw-bold">Created by:</h5>
-                                                        {{ $resource->creator->name }} 
-                                                        <br> {{ $resource->creator->employeeCode() }}
-                                                    </div>
-
-                                                    <!-- Warehouse -->
-                                                    <div class="mb-3">
-                                                        <h5 class="fw-bold">Warehouse:</h5>
-                                                        @if($resource->warehouse)
-                                                            {{ $resource->warehouse->name }} 
-                                                            <br> {{ $resource->warehouse->house
-                                                            .', '.$resource->warehouse->zipcode }}
-                                                            <br> {{ $resource->warehouse->barangay
-                                                            .', '.$resource->warehouse->city
-                                                            .', '.$resource->warehouse->province }}
-                                                        @else
-                                                            N/A
-                                                        @endif
-                                                    </div>
-
-                                                    <!-- Approved By: -->
-                                                    <div class="mb-3">
-                                                        <h5 class="fw-bold">Approved By:</h5>
-                                                        @if($resource->approver)
-                                                            {{ $resource->approver->name }} 
-                                                            <br> {{ $resource->approver->employeeCode() }}
-                                                        @else
-                                                            N/A
-                                                        @endif
-                                                    </div>
-
-                                                    <!-- Prepared By: -->
-                                                    <div class="mb-3">
-                                                        <h5 class="fw-bold">Prepared By:</h5>
-                                                        @if($resource->preparer)
-                                                            {{ $resource->preparer->name }} 
-                                                            <br> {{ $resource->preparer->employeeCode() }}
-                                                        @else
-                                                            N/A
-                                                        @endif
-                                                    </div>
-
-                                                    <!-- Driver: -->
-                                                    <div class="mb-3">
-                                                        <h5 class="fw-bold">Delivered By:</h5>
-                                                        @if($resource->driver)
-                                                            {{ $resource->driver->name }} 
-                                                            <br> {{ $resource->driver->employeeCode() }}
-                                                        @else
-                                                            N/A
-                                                        @endif
-                                                    </div>
+                                                    @include('parts.details.resource-details')
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Display Table -->
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped align-middle text-center mb-0">
-                                        <thead class="table-dark text-white">
-                                            <tr>
-                                                <th class="col-1">No.</th>
-                                                <th class="col-2">Name</th>
-                                                <th class="col-4">Description</th>
-                                                <th class="col-1">Quantity</th>
-                                                <th class="col-1">Cost</th>
-                                                <th class="col-1">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($resource->items as $item_index => $item)
-                                                <tr>
-                                                    <td>{{ $item_index + 1 }}</td>
-                                                    <td class="text-start">
-                                                        @if($item->details->category === 'material')
-                                                            <i class="bi bi-box"></i>
-                                                        @else
-                                                            <i class="bi bi-wrench"></i>
-                                                        @endif
-                                                        {{ $item->details->name }}
-                                                    </td>
-                                                    <td class="text-start">{{ $item->details->description }}</td>
-                                                    <td>
-                                                        {{ $item->quantity . ' ' . $item->details->measure}}
-                                                    </td>
-                                                    <td class="text-end pe-3">
-                                                        ₱{{ number_format($item->details->cost * $item->quantity, 2) }}</td>
-                                                    <td>{{ $item->status }}</td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="5" class="text-center text-muted">No resources added yet</td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                        @if($resource->items->isNotEmpty())
-                                            <tfoot class="table-light fw-bold">
-                                                <tr>
-                                                    <td colspan="3"></td>
-                                                    <td>Total:</td>
-                                                    <td class="text-end pe-3">₱{{ number_format($resource->items->sum(fn($item) => $item->details->cost * $item->quantity), 2) }}</td>
-                                                    <td></td>
-                                                </tr>
-                                            </tfoot>
-                                        @endif
-                                    </table>
-                                </div>
+
+                                <!-- Table -->
+                                @include('parts.tables.table-1')
                             </div>
 
                             <!-- Button trigger modal -->
-                            <a href="{{route('clerk.resource.prepare', $resource->id)}}" class="btn btn-primary w-100 w-sm-auto">
-                                Start Preparing
-                            </a>
+                            <form action="{{route('clerk.resource.prepare', $resource->id)}}" method="POST">
+                                @csrf @method('PUT')
+                                
+                                <button type="submit" class="btn btn-primary w-100 w-sm-auto">
+                                    Start Preparing
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
