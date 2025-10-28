@@ -1,18 +1,17 @@
-@extends('layouts.authentication.layout')
-
-@section('styles')
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify Code</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/forgot-password.css') }}" rel="stylesheet">
-@endsection
-
-@section('title', 'Forgot Password')
-
-@section('content')
+</head>
+<body>
     <div class="container mt-5 text-white">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card glass-card">
                     <div class="card-header">
-                        <h4 class="text-white">Enter Verification Code</h4>
+                        <h4>Enter Verification Code</h4>
                     </div>
                     <div class="card-body">
                         @if(session('success'))
@@ -24,7 +23,7 @@
                             <input type="hidden" name="email" value="{{ old('email') ?? session('email') }}">
                             
                             <div class="mb-3">
-                                <label for="code" class="form-label text-white">6-digit Code</label>
+                                <label for="code" class="form-label">6-digit Code</label>
                                 <input type="text" class="form-control @error('code') is-invalid @enderror" 
                                     id="code" name="code" maxlength="6" required 
                                     placeholder="Enter code sent to your email">
@@ -34,19 +33,13 @@
                                     @endforeach
                                 @endif
                             </div>
-                            <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 p-3">
-                                <button type="submit" class="btn btn-primary w-100">Verify Code</button>
-                            <a href="{{ route('password.request') }}" class="btn btn-secondary w-100">Back</a>
-                            </div>
-                            
+                            <button type="submit" class="btn btn-primary">Verify Code</button>
+                            <a href="{{ route('password.request') }}" class="btn btn-secondary">Back</a>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@endsection
-
-@push('scripts')
-    
-@endpush
+</body>
+</html>

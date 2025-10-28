@@ -193,7 +193,8 @@
 
                     <!-- Display Resources Table / Buttons  -->
                     <div class="table-responsive">  
-                        <table @if($items->isNotEmpty()) id="resourceTable" @endif class="table table-hover table-striped align-middle text-center mb-0">
+                        <table class="table table-hover table-striped align-middle text-center mb-0
+                            @if($items->isNotEmpty()) sortSearchTable @endif">
                             <thead class="table-dark text-white">
                                 <tr>
                                     <th class="col-1">No.</th>
@@ -254,7 +255,8 @@
                                     <div class="modal-body">
                                         <div class="table-responsive">
                                             <!-- Modal Table -->
-                                            <table class="table table-hover mb-0">
+                                            <table class="table table-hover mb-0
+                                            @if($items->isNotEmpty()) sortSearchTable @endif">
                                                 <thead class="table-dark">
                                                     <tr>
                                                         <th class="col-1">No.</th>
@@ -406,6 +408,5 @@
             this.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             this.querySelectorAll('td.bg-danger').forEach(td => td.classList.remove('bg-danger','text-white'));
         });
-
     </script>
 @endpush

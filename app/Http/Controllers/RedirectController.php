@@ -184,8 +184,17 @@ class RedirectController extends Controller
     // INVENTORY CLERK
 
     public function clerk_warehouses(){
+        $user = auth()->guard()->user();
+        $assigned = null;
+
+        if($user->role !== 'admin'){
+            $assigned = WarehouseUser::where('user_id', $user->id)
+                ->pluck('warehouse_id')
+                ->toArray();
+        }
+
         $warehouses = Warehouse::with(['users','items'])->get();
-        return view('clerk.warehouses', compact('warehouses'));
+        return view('clerk.warehouses', compact(['warehouses', 'assigned']));
     }
 
     public function clerk_requests()
@@ -270,6 +279,18 @@ class RedirectController extends Controller
     }
 
     public function clerk_inventory($warehouse_id){
+        $user = auth()->guard()->user();
+
+        if ($user->role !== 'admin') {
+            $hasAccess = WarehouseUser::where('warehouse_id', $warehouse_id)
+                ->where('user_id', $user->id)
+                ->exists();
+
+            if (!$hasAccess) {
+                return back()->withErrors(['You are not assigned to this warehouse.']);
+            }
+        }
+
         $warehouse = Warehouse::with('users')->findOrFail($warehouse_id);
         $items = Item::where('warehouse_id', $warehouse_id)->get();
         return view('clerk.inventory', compact('warehouse','items'));

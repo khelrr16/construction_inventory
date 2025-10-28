@@ -34,7 +34,7 @@ class DashboardController extends Controller
         $deliveryStats = [
             'pending' => ProjectResource::where('status', 'pending')->count(),
             'packing' => ProjectResource::where('status', 'packing')->count(),
-            'delivering' => ProjectResource::where('status', 'delivering')->count(),
+            'on delivery' => ProjectResource::where('status', 'on delivery')->count(),
             'delivered' => ProjectResource::where('status', 'delivered')->count(),
             'cancelled' => ProjectResource::where('status', 'cancelled')->count(),
         ];

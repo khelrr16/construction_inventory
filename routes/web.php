@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
@@ -112,8 +111,8 @@ Route::middleware(['auth', 'can:access-admin'])->group(function(){
     Route::delete('/admin/users/warehouse-assignment/delete/{user_id}', [UserController::class, 'admin_deleteWarehouse'])
         ->name('admin.user.deleteWarehouse');
     
-    Route::delete('/admin/users/delete/{user_id}', [UserController::class, 'admin_destroy'])
-        ->name('admin.user.destroy');
+    Route::delete('/admin/users/delete/{user_id}', [UserController::class, 'admin_delete'])
+        ->name('admin.user.delete');
 
     //Vehicles
     Route::put('/admin/project/delivery/{resource_id}/{action}', [ResourceController::class, 'resource_delivery_update'])

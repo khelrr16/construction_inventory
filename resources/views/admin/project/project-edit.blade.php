@@ -79,7 +79,7 @@
                             <option @if($project->status == 'completed') selected @endif
                                 class="fw-bold text-success"
                                 value="completed">
-                                Sir, tapos na po.
+                                Completed
                             </option>
                             
                         </select>

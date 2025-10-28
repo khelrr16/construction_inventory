@@ -70,13 +70,12 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>
+                                        @if($user->role !== 'admin')
                                         <form action="{{ route('admin.user.updateRole', $user->id) }}" method="POST"
                                             class="d-flex">
                                             @csrf @method('PUT')
                                             <select name="role" class="form-select me-2">
                                                 <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User
-                                                </option>
-                                                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin
                                                 </option>
                                                 <option value="driver" {{ $user->role == 'driver' ? 'selected' : '' }}>Driver
                                                 </option>
@@ -85,13 +84,23 @@
                                             </select>
                                             <button type="submit" class="btn btn-success btn-sm">Save</button>
                                         </form>
+                                        @else
+                                            <div class="badge bg-info ms-3 fs-5">
+                                                {{  ucwords($user->role) }}
+                                            </div>
+                                            
+                                        @endif
                                     </td>
-                                    <td>
-                                        <form action="" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                                        </form>
+                                    <td class="text-center">
+                                        @if($user->role !== 'admin')
+                                            <form action="{{ route('admin.user.delete', $user->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                            </form>
+                                        @else
+                                            <button disabled class="btn btn-mute btn-sm">-</button>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

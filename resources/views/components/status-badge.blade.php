@@ -18,6 +18,7 @@
         'incomplete' => 'dark',
         'inactive' => 'dark',
         'declined' => 'danger',
+        'received' => 'success',
     ];
     
     $color = $colors[$status] ?? 'secondary';

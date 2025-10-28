@@ -11,9 +11,10 @@ class ReceiptController extends Controller
     {
         // Get resource items - adjust based on your model
         $resource = ProjectResourceItem::findOrFail($resource_id);
-        $resourceItems = ProjectResourceItem::where('resource_id', $resource_id)
-        ->where('status', 'received');
-
+        $resourceItems = ProjectResourceItem::with('details')->where('resource_id', $resource_id)
+        ->whereIn('status', ['received', 'incomplete'])
+        ->get();
+        
         $data = [
             'receiptNumber' => 'REC-' . date('Ymd') . '-' . str_pad($resourceItems->count(), 4, '0', STR_PAD_LEFT),
             'issueDate' => now()->format('F j, Y g:i A'),

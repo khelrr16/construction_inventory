@@ -18,5 +18,15 @@
 
     $(document).ready(function() {
         $('.resourceTable').DataTable();
+
+        $('.sortOnlyTable').DataTable({
+                searching: false, // Disables the search input
+                paging: false,    // Disables pagination
+                info: false       // Optionally, hides the "Showing X of Y entries" info
+            });
+        $('.sortSearchTable').DataTable({
+                paging: false,    // Disables pagination
+                info: false       // Optionally, hides the "Showing X of Y entries" info
+            });
     });
 </script>

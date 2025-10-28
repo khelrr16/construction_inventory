@@ -1,18 +1,17 @@
-@extends('layouts.authentication.layout')
-
-@section('styles')
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reset Password</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/forgot-password.css') }}" rel="stylesheet">
-@endsection
-
-@section('title', 'Forgot Password')
-
-@section('content')
+</head>
+<body>
     <div class="container mt-5 text-white">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card glass-card">
                     <div class="card-header">
-                        <h4 class="text-white">Reset Password</h4>
+                        <h4>Reset Password</h4>
                     </div>
                     <div class="card-body">
                         <form method="POST" action="{{ route('password.reset') }}">
@@ -21,7 +20,7 @@
                             <input type="hidden" name="code" value="{{ old('code') ?? session('code') }}">
                             
                             <div class="mb-3">
-                                <label for="password" class="form-label text-white">New Password</label>
+                                <label for="password" class="form-label">New Password</label>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror" 
                                     id="password" name="password" required>
                                 @error('password')
@@ -30,23 +29,18 @@
                             </div>
                             
                             <div class="mb-3">
-                                <label for="password_confirmation" class="form-label text-white">Confirm New Password</label>
+                                <label for="password_confirmation" class="form-label">Confirm New Password</label>
                                 <input type="password" class="form-control" 
                                     id="password_confirmation" name="password_confirmation" required>
                             </div>
                             
-                            <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 p-3">
-                                <button type="submit" class="btn btn-primary w-100">Reset Password</button>
-                                <a href="{{ route('password.verify.form') }}" class="btn btn-secondary w-100">Back</a>
-                            </div>
+                            <button type="submit" class="btn btn-primary">Reset Password</button>
+                            <a href="{{ route('password.verify.form') }}" class="btn btn-secondary">Back</a>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@endsection
-
-@push('scripts')
-    
-@endpush
+</body>
+</html>

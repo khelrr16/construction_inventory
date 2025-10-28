@@ -36,12 +36,16 @@
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
+
+        .company-logo{
+            height: 130px;
+        }
         
-        .company-name {
+        /* .company-name {
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 5px;
-        }
+        }*/
         
         .company-address {
             font-size: 14px;
@@ -123,7 +127,7 @@
         .grand-total {
             font-size: 20px;
             font-weight: bold;
-            border-top: 1px solid #000;
+            /* border-top: 1px solid #000; */
             padding-top: 10px;
             margin-top: 10px;
         }
@@ -178,12 +182,16 @@
     <div class="receipt-container">
         <!-- Header -->
         <div class="header">
-            <div class="company-name">YOUR COMPANY NAME</div>
-            <div class="company-address">
-                123 Business Street, City, State 12345<br>
-                Phone: (555) 123-4567 | Email: info@company.com
+            <div class="company-name">
+                <img src="{{ asset('img/logo/full-logo.png') }}"
+                    class="company-logo"
+                    > 
             </div>
-            <div class="receipt-title">RESOURCE ITEMS RECEIPT</div>
+            <div class="company-address">
+                Blk 4 Lot 33, Amber Street, San Pedro, Laguna 4023<br>
+                Phone: (+63) 970-212-4061 | Email: info@contrucktor.com
+            </div>
+            <div class="receipt-title">RESOURCE RECEIPT</div>
         </div>
 
         <!-- Receipt Information -->
@@ -211,8 +219,7 @@
                     <th width="20%">Category</th>
                     <th width="10%">Quantity</th>
                     <th width="15%">Unit Cost</th>
-                    <th width="15%">Total Cost</th>
-                    <th width="10%">Status</th>
+                    <th width="20%">Total Cost</th>
                 </tr>
             </thead>
             <tbody>
@@ -223,25 +230,16 @@
                 
                 @foreach($resourceItems as $item)
                 @php
-                    $totalCost = $item->quantity * ($item->unit_cost ?? 0);
+                    $totalCost = $item->completed * ($item->details->cost ?? 0);
                     $grandTotal += $totalCost;
                 @endphp
                 <tr>
                     <td class="text-center">{{ $itemCount++ }}</td>
-                    <td>{{ $item->name ?? $item->item_name ?? 'N/A' }}</td>
-                    <td>{{ $item->category ?? $item->category_name ?? 'General' }}</td>
-                    <td class="text-center">{{ $item->quantity ?? 0 }}</td>
-                    <td class="text-right">${{ number_format($item->unit_cost ?? 0, 2) }}</td>
-                    <td class="text-right">${{ number_format($totalCost, 2) }}</td>
-                    <td class="text-center">
-                        <span style="padding: 4px 8px; border-radius: 3px; font-size: 12px; 
-                            @if($item->status == 'complete') background: #d4edda; color: #155724;
-                            @elseif($item->status == 'incomplete') background: #fff3cd; color: #856404;
-                            @elseif($item->status == 'missing') background: #f8d7da; color: #721c24;
-                            @else background: #e2e3e5; color: #383d41; @endif">
-                            {{ ucfirst($item->status ?? 'pending') }}
-                        </span>
-                    </td>
+                    <td>{{ $item->name ?? $item->details->name ?? 'N/A' }}</td>
+                    <td>{{ $item->category ?? ucwords($item->details->category) ?? 'General' }}</td>
+                    <td class="text-center">{{ $item->completed ?? 0 }}</td>
+                    <td class="text-right">₱{{ number_format($item->details->cost ?? 0, 2) }}</td>
+                    <td class="text-right">₱{{ number_format($totalCost, 2) }}</td>
                 </tr>
                 @endforeach
 
@@ -262,17 +260,17 @@
 
         <!-- Totals Section -->
         <div class="total-section">
-            <div class="total-row">
+            {{-- <div class="total-row">
                 <div>Subtotal:</div>
                 <div>${{ number_format($grandTotal, 2) }}</div>
             </div>
             <div class="total-row">
                 <div>Tax (0%):</div>
                 <div>$0.00</div>
-            </div>
+            </div> --}}
             <div class="total-row grand-total">
                 <div>GRAND TOTAL:</div>
-                <div>${{ number_format($grandTotal, 2) }}</div>
+                <div>₱{{ number_format($grandTotal, 2) }}</div>
             </div>
         </div>
 

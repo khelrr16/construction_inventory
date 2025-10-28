@@ -84,7 +84,12 @@
                         </div>
                         <div class="card-footer bg-transparent border-top-0">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-success">Active</span>
+                                <div>
+                                    <x-status-badge status="{{ $warehouse->status }}" class="fs-5" />
+                                    @if($assigned ? in_array($warehouse->id, $assigned) : '')
+                                        <span class="badge bg-warning fs-5">Assigned</span>
+                                    @endif
+                                </div>
                                 <div class="btn-group">
                                     <a href="{{ route('clerk.inventory', $warehouse->id) }}" class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-eye"></i>

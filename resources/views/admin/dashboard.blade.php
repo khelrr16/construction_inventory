@@ -279,12 +279,12 @@
         var deliveryStatusChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Pending', 'Packing', 'Delivering', 'Delivered', 'Cancelled'],
+                labels: ['Pending', 'Packing', 'On Delivery', 'Delivered', 'Cancelled'],
                 datasets: [{
                     data: [
                         {{ $deliveryStats['pending'] }},
                         {{ $deliveryStats['packing'] }},
-                        {{ $deliveryStats['delivering'] }},
+                        {{ $deliveryStats['on delivery'] }},
                         {{ $deliveryStats['delivered'] }},
                         {{ $deliveryStats['cancelled'] }}
                     ],

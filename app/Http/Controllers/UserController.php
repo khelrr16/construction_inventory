@@ -61,7 +61,7 @@ class UserController extends Controller
         return back()->with('success', ' User warehouse assignment deleted successfully.');   
     }
 
-    public function admin_destroy($user_id)
+    public function admin_delete($user_id)
     {
         $user = User::findOrFail($user_id);
         $name = $user->name;

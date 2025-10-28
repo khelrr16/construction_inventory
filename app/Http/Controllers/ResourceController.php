@@ -236,10 +236,13 @@ class ResourceController extends Controller
         $resource_items = ProjectResourceItem::where('resource_id', $resource_id)->get();
         $vehicle = Vehicle::findOrFail($request->vehicle_id);
         if($vehicle->status == 'occupied'){
-            return back()->withError(['Vehicle is already occupied.']);
+            return back()->withErrors(['Vehicle is already occupied.']);
         }
 
-        $resource->update(['status' => 'on delivery']);
+        $resource->update([
+            'status' => 'on delivery',
+            'vehicle_id' => $vehicle->id,
+        ]);
         foreach($resource_items as $index => $item){
             $item->update(['status' => 'on delivery']);
         }
@@ -281,6 +284,8 @@ class ResourceController extends Controller
 
     public function resource_verify_complete(Request $request, $resource_id){
         $resource = ProjectResource::findOrFail($resource_id);
+        $vehicle = Vehicle::findOrFail($resource->vehicle_id);
+
         $isIncomplete = false;
         $missingCount = 0;
         $brokenCount = 0;
@@ -314,6 +319,7 @@ class ResourceController extends Controller
         }
 
         $resource->update(['status' => 'received']);
+        $vehicle->update(['status' => 'active']);
 
         if($isIncomplete){
             $descriptions = array_filter([

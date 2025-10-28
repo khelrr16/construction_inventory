@@ -130,11 +130,11 @@
                                                     Resource <i class="bi bi-info-circle"></i>
                                                 </h5>
                                                 
-                                                {{-- @if($resource->status == 'received') --}}
+                                                @if($resource->status == 'received')
                                                     <a href="{{ route('receipts.resource-items', $resource->id) }}" target="_blank" class="btn btn-primary">
                                                         📄 Print Receipt
                                                     </a>
-                                                {{-- @endif --}}
+                                                @endif
                                                 
                                                 <!-- Details Modal -->
                                                 <div class="modal fade" id="resourceDetailsModal{{ $index }}" tabindex="-1" aria-labelledby="resourceDetailsModalLabel{{ $index }}" aria-hidden="true">
