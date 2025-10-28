@@ -1,6 +1,6 @@
 @extends('layouts.clerk.layout')
 
-@section('title', 'Title')
+@section('title', 'Requests For Packing')
 
 @section('content')
     <!-- Toast Alert -->

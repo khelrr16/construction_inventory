@@ -4,6 +4,18 @@
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script src="{{ asset('js/sidebar.js') }}"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var modals = document.querySelectorAll('.resettable-modal');
+        modals.forEach(function(modal) {
+            modal.addEventListener('hidden.bs.modal', function() {
+                var forms = this.querySelectorAll('form');
+                forms.forEach(function(form) {
+                    form.reset();
+                });
+            });
+        });
+    });
+
     $(document).ready(function() {
         $('.resourceTable').DataTable();
     });

@@ -17,7 +17,7 @@ class ItemsTableSeeder extends Seeder
         foreach ($csv as $record) {
             DB::table('items')->insert([
                 'warehouse_id'    => $record['warehouse_id'],
-                'category'    => $record['category'],
+                'category'    => strtolower($record['category']),
                 'name'        => $record['name'],
                 'description' => $record['description'],
                 'cost'        => $record['cost'],

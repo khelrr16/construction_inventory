@@ -1,6 +1,6 @@
 @extends('layouts.driver.layout')
 
-@section('title', 'Title')
+@section('title', 'Pending Deliveries')
 
 @section('content')
     <!-- Toast Alert -->
@@ -119,7 +119,7 @@
                             </button>
 
                             <!-- Delivery Modal -->
-                            <div class="modal fade" id="startDeliveryModal{{ $index }}" tabindex="-1" aria-labelledby="startDeliveryModalLabel{{ $index }}" aria-hidden="true">
+                            <div class="modal fade resettable-modal" id="startDeliveryModal{{ $index }}" tabindex="-1" aria-labelledby="startDeliveryModalLabel{{ $index }}" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <form action="{{route('driver.delivery.start', $resource->id)}}"
@@ -182,19 +182,3 @@
     
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var modals = document.querySelectorAll('.modal');
-            modals.forEach(function(modal) {
-                modal.addEventListener('hidden.bs.modal', function() {
-                    var forms = this.querySelectorAll('form');
-                    forms.forEach(function(form) {
-                        form.reset();
-                    });
-                });
-            });
-        });
-    </script>
-@endpush

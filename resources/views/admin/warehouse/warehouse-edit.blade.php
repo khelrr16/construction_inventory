@@ -1,6 +1,6 @@
 @extends('layouts.admin.layout')
 
-@section('title', 'Title')
+@section('title', $warehouse->name)
 
 @section('content')
     <!-- Toast Alert -->
@@ -62,7 +62,6 @@
                             </option>                        
                         </select>
                     </div>
-                    
                 </div>
                 
                 <div class="card-body">
@@ -122,9 +121,9 @@
                     </div>
                 </div>
 
-                <div class="card-footer">
-                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Save Warehouse</button>
+                <div class="card-footer d-flex flex-column flex-sm-row gap-2 p-3">
+                    <button type="button" class="btn btn-light border w-100">Cancel</button>
+                    <button type="submit" class="btn btn-success w-100"><i class="bi bi-check-circle"></i> Save Warehouse</button>
                 </div>
             </form>
         </div>

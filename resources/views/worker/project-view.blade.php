@@ -1,6 +1,6 @@
 @extends('layouts.worker.layout')
 
-@section('title', 'Project View')
+@section('title', $project->project_name)
 
 @section('styles')
     <style>
@@ -88,7 +88,7 @@
                         </button>
 
                         <!-- Add Resource Modal -->
-                        <div class="modal fade" id="addResourceModal" tabindex="-1" aria-labelledby="addResourceModalLabel" aria-hidden="true">
+                        <div class="modal fade resettable-modal" id="addResourceModal" tabindex="-1" aria-labelledby="addResourceModalLabel" aria-hidden="true">
                             <form action="{{ route('worker.resource.new', $project->id) }}" method="POST">
                                 @csrf
                                 <div class="modal-dialog modal-lg">

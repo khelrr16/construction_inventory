@@ -1,6 +1,6 @@
 @extends('layouts.worker.layout')
 
-@section('title', 'Project Resource (Verify)')
+@section('title', 'Project Resource Verify')
 
 @section('content')
     <!-- Toast Alert -->

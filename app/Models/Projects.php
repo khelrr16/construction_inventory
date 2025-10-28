@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Models\ProjectResource;
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Projects extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Auditable;
     protected $fillable = [
         'created_by',
         'worker_id',

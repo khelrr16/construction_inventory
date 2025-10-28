@@ -3,12 +3,13 @@
 <head>
     <title>Verify Code</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/forgot-password.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5 text-white">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div class="card">
+                <div class="card glass-card">
                     <div class="card-header">
                         <h4>Enter Verification Code</h4>
                     </div>

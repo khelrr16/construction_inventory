@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProjectResource;
-use App\Models\Warehouse;
+use Carbon\Carbon;
+use App\Models\Item;
 use App\Models\User;
 use App\Models\Vehicle;
-use App\Models\Item;
-use Carbon\Carbon;
+use App\Models\AuditLog;
+use App\Models\Warehouse;
+use App\Models\ProjectResource;
 
 class DashboardController extends Controller
 {
@@ -39,9 +40,13 @@ class DashboardController extends Controller
         ];
 
         // Recent Activities
-        $recentActivities = ProjectResource::with(['project', 'driver', 'warehouse'])
+        // $recentActivities = ProjectResource::with(['project', 'driver', 'warehouse'])
+        //     ->latest()
+        //     ->take(10)
+        //     ->get();
+        $recentActivities = AuditLog::with('user')
             ->latest()
-            ->take(10)
+            ->limit(50)
             ->get();
 
         // Warehouse-wise Statistics

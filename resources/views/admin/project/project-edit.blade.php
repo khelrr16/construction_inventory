@@ -1,6 +1,6 @@
 @extends('layouts.admin.layout')
 
-@section('title', 'Title')
+@section('title', $project->project_name)
 
 @section('content')
     <!-- Toast Alert -->

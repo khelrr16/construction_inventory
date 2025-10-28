@@ -1,6 +1,6 @@
 @extends('layouts.clerk.layout')
 
-@section('title', 'Title')
+@section('title', $warehouse->name. ' Inventory')
 
 @section('content')
     <!-- Toast Alert -->
@@ -115,7 +115,7 @@
                         </button>
 
                         <!-- Add Item Modal -->
-                        <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel"
+                        <div class="modal fade resettable-modal" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
@@ -238,7 +238,7 @@
 
 
                     <!-- Modal for Batch Supply -->
-                    <div class="modal fade" id="supplyModal" tabindex="-1" aria-labelledby="supplyModalLabel"
+                    <div class="modal fade resettable-modal" id="supplyModal" tabindex="-1" aria-labelledby="supplyModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -308,7 +308,7 @@
                     </div>
 
                     <!-- Modal for Batch Delete -->
-                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+                    <div class="modal fade resettable-modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -398,18 +398,12 @@
 
         // Batch Supply Modal
         document.getElementById('supplyModal').addEventListener('hidden.bs.modal', function () {
-
-            // Uncheck all checkboxes inside the modal
             this.querySelectorAll('input[type="number"]').forEach(inp => inp.value = null);
         });
 
         // Batch Delete Modal
         document.getElementById('deleteModal').addEventListener('hidden.bs.modal', function () {
-
-            // Uncheck all checkboxes inside the modal
             this.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-
-            // Also remove any "active" highlight if your toggleRemove() adds one
             this.querySelectorAll('td.bg-danger').forEach(td => td.classList.remove('bg-danger','text-white'));
         });
 

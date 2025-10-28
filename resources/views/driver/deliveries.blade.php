@@ -1,6 +1,6 @@
 @extends('layouts.driver.layout')
 
-@section('title', 'Title')
+@section('title', 'Deliveries')
 
 @section('content')
     <!-- Toast Alert -->

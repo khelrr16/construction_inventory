@@ -1,6 +1,6 @@
 @extends('layouts.worker.layout')
 
-@section('title', 'Project Resource (Add)')
+@section('title', $resource->project->project_name. ' Add Item')
 
 @section('content')
     <!-- Toast Alert -->
@@ -64,41 +64,9 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
 
-                                <!-- Project Details Modal -->
-                                <div class="modal-body">
-                                    {{-- Project Overview --}}
-                                    <h4 class="fw-bold text-primary">
-                                        <i class="bi bi-box-seam"></i> Project Overview
-                                    </h4>
-                                    <p class="mb-5 text-muted">{{ $resource->project->description ?? 'No description provided' }}</p>
-
-                                    {{-- Location --}}
-                                    <h4 class="fw-bold text-primary">
-                                        <i class="bi bi-geo-alt"></i> Location
-                                    </h4>
-                                    <p class="mb-1">{{
-                                        ($resource->project->house.', '.$resource->project->zipcode)
-                                        ?? 'N/A' }}
-                                    </p>
-                                    <p class="mb-5">{{ 
-                                        ($resource->project->province.', '.$resource->project->city.', '.$resource->project->barangay) 
-                                        ?? 'N/A' }}
-                                    </p>
-
-                                    {{-- Project Owner --}}
-                                    <h4 class="fw-bold text-primary">
-                                        <i class="bi bi-person"></i> Project Owner
-                                    </h4>
-                                    <p class="mb-1"><strong>Name:</strong> {{ $resource->project->owner->name ?? 'N/A' }}</p>
-                                    <p class="mb-1"><strong>Phone:</strong> {{ $resource->project->owner->contact_number ?? 'N/A' }}</p>
-                                    <p class="mb-5"><strong>Email:</strong> {{ $resource->project->owner->email ?? 'N/A' }}</p>
-
-                                    {{-- Assigned --}}
-                                    <h4 class="fw-bold text-primary">
-                                        <i class="bi bi-check2-circle"></i> Assigned
-                                    </h4>
-                                    <p class="mb-1"><strong>Worker:</strong> {{ $resource->project->worker->name ?? 'N/A' }}</p>
-                                    <p class="mb-1"><strong>ID:</strong> {{ $resource->project->worker->employeeCode() ?? 'N/A' }}</p>
+                                @php $project = $resource->project @endphp
+                                @include('parts.details.project-details')
+                                
                                 </div>
                             </div>
                         </div>

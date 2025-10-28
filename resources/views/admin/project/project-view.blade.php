@@ -1,6 +1,6 @@
 @extends('layouts.admin.layout')
 
-@section('title', 'Title')
+@section('title', $project->project_name)
 
 @section('content')
     <!-- Toast Alert -->
@@ -129,7 +129,13 @@
                                                     data-bs-target="#resourceDetailsModal{{ $index }}">
                                                     Resource <i class="bi bi-info-circle"></i>
                                                 </h5>
-
+                                                
+                                                {{-- @if($resource->status == 'received') --}}
+                                                    <a href="{{ route('receipts.resource-items', $resource->id) }}" target="_blank" class="btn btn-primary">
+                                                        📄 Print Receipt
+                                                    </a>
+                                                {{-- @endif --}}
+                                                
                                                 <!-- Details Modal -->
                                                 <div class="modal fade" id="resourceDetailsModal{{ $index }}" tabindex="-1" aria-labelledby="resourceDetailsModalLabel{{ $index }}" aria-hidden="true">
                                                     <div class="modal-dialog modal-lg">

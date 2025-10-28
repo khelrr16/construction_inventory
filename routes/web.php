@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -8,9 +7,11 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\ForgotPasswordController;
 
@@ -78,6 +79,9 @@ Route::middleware(['auth', 'can:access-admin'])->group(function(){
     
     Route::get('/admin/projects/edit/{project_id}', [RedirectController::class, 'admin_project_edit'])
         ->name('admin.project.edit');
+
+    Route::get('/receipts/resource-items/{resource_id}', [ReceiptController::class, 'printResourceItems'])
+        ->name('receipts.resource-items');
 
     Route::get('/admin/warehouses/', [RedirectController::class, 'admin_warehouses'])
         ->name('admin.warehouses');

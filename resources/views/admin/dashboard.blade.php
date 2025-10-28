@@ -151,19 +151,82 @@
                                     <td>{{ $warehouse->pending_count }}</td>
                                     <td>{{ $warehouse->delivering_count }}</td>
                                     <td>{{ $warehouse->delivered_count }}</td>
-                                    <td>
-                                        <span class="badge badge-{{ $warehouse->low_stock_items > 0 ? 'danger' : 'success' }}">
-                                            {{ $warehouse->low_stock_items }}
-                                        </span>
+                                    <td class="{{ $warehouse->low_stock_items > 0 ? 'text-danger' : 'text-success'}}">
+                                        {{ $warehouse->low_stock_items }}
                                     </td>
                                     <td>
-                                        <span class="badge badge-success">Active</span>
+                                        <x-status-badge status="{{ $warehouse->status }}" />
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activities Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Activities</h6>
+                </div>
+                <div class="card-body">
+                    @if($recentActivities->isNotEmpty())
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Action</th>
+                                        <th>User</th>
+                                        <th>Subject</th>
+                                        <th>IP Address</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($recentActivities as $activity)
+                                    <tr>
+                                        <td class="text-center align-middle">
+                                            <span class="badge
+                                                @if($activity->description == 'created') bg-success
+                                                @elseif($activity->description == 'updated') bg-warning
+                                                @elseif($activity->description == 'deleted') bg-danger
+                                                @else bg-info @endif">
+                                                {{ ucfirst($activity->description) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if($activity->user)
+                                                {{ $activity->user->name }}
+                                                <small class="text-muted d-block">{{ $activity->user->email }}</small>
+                                            @else
+                                                <span class="text-muted">System</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @php
+                                                $subjectType = class_basename($activity->subject_type);
+                                            @endphp
+                                            {{ $subjectType }} #{{ $activity->subject_id }}
+                                        </td>
+                                        <td>{{ $activity->host }}</td>
+                                        <td>
+                                            <small>{{ $activity->created_at->format('M j, Y') }}</small>
+                                            <br>
+                                            <small class="text-muted">{{ $activity->created_at->format('g:i A') }}</small>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <p class="text-muted text-center py-3">No activities found.</p>
+                    @endif
                 </div>
             </div>
         </div>
@@ -209,68 +272,66 @@
 @endsection
 
 @push('scripts')
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-// Delivery Status Pie Chart
-var ctx = document.getElementById('deliveryStatusChart').getContext('2d');
-var deliveryStatusChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: ['Pending', 'Packing', 'Delivering', 'Delivered', 'Cancelled'],
-        datasets: [{
-            data: [
-                {{ $deliveryStats['pending'] }},
-                {{ $deliveryStats['packing'] }},
-                {{ $deliveryStats['delivering'] }},
-                {{ $deliveryStats['delivered'] }},
-                {{ $deliveryStats['cancelled'] }}
-            ],
-            backgroundColor: ['#f6c23e', '#fd7e14', '#36b9cc', '#1cc88a', '#e74a3b'],
-        }]
-    },
-    options: {
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            }
-        }
-    }
-});
-
-// Weekly Delivery Line Chart
-var ctx2 = document.getElementById('weeklyDeliveryChart').getContext('2d');
-var weeklyDeliveryChart = new Chart(ctx2, {
-    type: 'line',
-    data: {
-        labels: @json($weeklyData['labels']),
-        datasets: [{
-            label: 'Deliveries Created',
-            data: @json($weeklyData['deliveries']),
-            borderColor: '#4e73df',
-            backgroundColor: 'rgba(78, 115, 223, 0.1)',
-            fill: true
-        }, {
-            label: 'Deliveries Completed',
-            data: @json($weeklyData['completed']),
-            borderColor: '#1cc88a',
-            backgroundColor: 'rgba(28, 200, 138, 0.1)',
-            fill: true
-        }]
-    },
-    options: {
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    stepSize: 1
+    <script>
+        var ctx = document.getElementById('deliveryStatusChart').getContext('2d');
+        var deliveryStatusChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Packing', 'Delivering', 'Delivered', 'Cancelled'],
+                datasets: [{
+                    data: [
+                        {{ $deliveryStats['pending'] }},
+                        {{ $deliveryStats['packing'] }},
+                        {{ $deliveryStats['delivering'] }},
+                        {{ $deliveryStats['delivered'] }},
+                        {{ $deliveryStats['cancelled'] }}
+                    ],
+                    backgroundColor: ['#f6c23e', '#fd7e14', '#36b9cc', '#1cc88a', '#e74a3b'],
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
                 }
             }
-        }
-    }
-});
-</script>
+        });
+
+
+        var ctx2 = document.getElementById('weeklyDeliveryChart').getContext('2d');
+        var weeklyDeliveryChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: @json($weeklyData['labels']),
+                datasets: [{
+                    label: 'Deliveries Created',
+                    data: @json($weeklyData['deliveries']),
+                    borderColor: '#4e73df',
+                    backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                    fill: true
+                }, {
+                    label: 'Deliveries Completed',
+                    data: @json($weeklyData['completed']),
+                    borderColor: '#1cc88a',
+                    backgroundColor: 'rgba(28, 200, 138, 0.1)',
+                    fill: true
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 @endpush

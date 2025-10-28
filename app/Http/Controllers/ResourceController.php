@@ -313,9 +313,7 @@ class ResourceController extends Controller
             $resource_item->save();
         }
 
-        $resource->update([
-            'status' => $isIncomplete ? 'incomplete' : 'received'
-        ]);
+        $resource->update(['status' => 'received']);
 
         if($isIncomplete){
             $descriptions = array_filter([

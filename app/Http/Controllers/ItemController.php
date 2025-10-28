@@ -41,7 +41,7 @@ class ItemController extends Controller
             // Map CSV columns to database fields
             $data = [
                 'warehouse_id' => $warehouse_id,
-                'category' => $row[0] ?? null,
+                'category' => strtolower($row[0]) ?? null,
                 'name' => $row[1] ?? null,
                 'description' => $row[2] ?? null,
                 'cost' => $row[3] ?? null,
@@ -131,7 +131,8 @@ class ItemController extends Controller
     }
     
     public function batch_supply(Request $request){
-        foreach($request->inventory_item as $id => $value){
+
+        foreach($request->inventory_items as $id => $value){
             $item = Item::findOrFail($id);
             $item->stocks += $value;
             $item->save();

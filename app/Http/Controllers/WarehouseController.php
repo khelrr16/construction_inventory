@@ -17,7 +17,7 @@ class WarehouseController extends Controller
             'province' => 'required|max:255',
             'zipcode' => 'integer|required|max:10000',
         ]);
-
+        
         Warehouse::create($request->all());
         return back()->with('success','Warehouse created successfully.');
     }

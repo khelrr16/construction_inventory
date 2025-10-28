@@ -16,8 +16,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
-
         User::factory()->create([
             'name' => 'Odd Mint',
             'email' => 'admin@gmail.com',
@@ -50,11 +48,93 @@ class DatabaseSeeder extends Seeder
             'password' => 'asdjklasdjkl',
         ]);
 
-        Warehouse::factory(3)->create();
+        User::factory(10)->create();
+
+        //Warehouse----------------------------------------------------------
+        Warehouse::factory()->create([
+            'name' => 'Blooming Star',
+            'house' => 'Blk 15 Lot 3 Bagong pag-asa street',
+            'barangay' => 'United Bayanihan',
+            'city' => 'San Pedro',
+            'province' => 'Laguna',
+            'zipcode'=> '4023',
+            'status' => 'active',
+        ]);
+
+        Warehouse::factory()->create([
+            'name' => 'RPN Hardware and Construction',
+            'house' => 'Unit 12B Casim Compound',
+            'barangay' => 'Talon Uno',
+            'city' => 'las piñas',
+            'province' => 'Metro Manila',
+            'zipcode' => '1747',
+            'status' => 'active',
+        ]);
+
+        Warehouse::factory()->create([
+            'name' => '24 Orient',
+            'house' => 'Blk 17 Lot 8',
+            'barangay' => 'Pasong Camachile',
+            'city' => 'General Trias',
+            'province' => 'Cavite',
+            'zipcode' => '4107',
+            'status' => 'active'
+        ]);
+
+        Warehouse::factory()->create([
+            'name' => 'FG Home Builders and Construction Supply',
+            'house' => '446V+WGP',
+            'barangay' => 'San Antonio',
+            'city' => 'Santo Tomas',
+            'province' => 'Batangas',
+            'zipcode' => '4234',
+            'status' => 'active',
+        ]);
+
+
+        //Vehicle----------------------------------------------------------
+        Vehicle::factory()->create([
+            'type' => 'Truck',
+            'brand' => 'Isuzu',
+            'color' => 'White',
+            'model' => 'NQR75L',
+            'plate_number' => 'NGR75',
+            'registered_by' => 1,
+            'status' => 'active',
+        ]);
+
+        Vehicle::factory()->create([
+            'type' => 'Truck',
+            'brand' => 'Fuso',
+            'color' => 'White',
+            'model' => 'Canter FE71',
+            'plate_number' => 'HTO5658',
+            'registered_by' => 1,
+            'status' => 'active',
+        ]);
+
+        Vehicle::factory()->create([
+            'type' => 'Truck',
+            'brand' => 'Fuso',
+            'color' => 'White',
+            'model' => 'Canter FE73',
+            'plate_number' => 'HTO2268',
+            'registered_by' => 1,
+            'status' => 'active',
+        ]);
+
+        Vehicle::factory()->create([
+            'type' => 'Truck',
+            'brand' => 'Fuso',
+            'color' => 'Gray',
+            'model' => 'Canter FE74',
+            'plate_number' => 'JLK1381',
+            'registered_by' => 1,
+            'status' => 'active',
+        ]);
+
+        //
         $this->call(ItemsTableSeeder::class);
-        
-        // Item::factory(50)->create();
-        // Vehicle::factory(3)->create();
         
     }
 }

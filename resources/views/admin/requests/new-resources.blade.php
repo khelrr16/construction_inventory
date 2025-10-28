@@ -1,6 +1,6 @@
 @extends('layouts.admin.layout')
 
-@section('title', 'Title')
+@section('title', 'New Resources')
 
 @section('content')
     <!-- Toast Alert -->

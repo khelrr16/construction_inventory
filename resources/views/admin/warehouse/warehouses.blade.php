@@ -59,8 +59,8 @@
                             </p>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-primary">{{ ucwords($warehouse->status) }}</span>
-                            <!-- Project status badges -->
+                            <x-status-badge status="{{ $warehouse->status }}" class="fs-5" />
+                            
                             <a href="{{ route('admin.warehouse.edit', $warehouse->id) }}" class="btn btn-light btn-lg border">
                                 <i class="bi bi-gear"></i>
                             </a>
@@ -79,7 +79,7 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+        <div class="modal fade resettable-modal" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content shadow-lg">
                     <div class="modal-header bg-primary text-white">
@@ -91,6 +91,8 @@
                     <form action="{{ route('admin.warehouse.new') }}" method="POST">
                         @csrf
                         <div class="modal-body">
+                            <input type="hidden" name="status" value="inactive">
+
                             <!-- Project Name -->
                             <div class="mb-3">
                                 <label for="name" class="form-label fw-bold">Warehouse Name</label>

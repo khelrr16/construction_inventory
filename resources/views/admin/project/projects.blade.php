@@ -72,7 +72,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+    <div class="modal fade resettable-modal" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content shadow-lg">
                 <div class="modal-header bg-primary text-white">
